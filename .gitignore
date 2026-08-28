@@ -1,0 +1,30 @@
+# NetBeans
+/nbproject/private/
+/build/
+/dist/
+/libraries/CopyLibs/
+
+# IntelliJ IDEA
+.idea/
+
+# Maven
+/target/
+
+# Java
+*.class
+
+# Vim
+*.swp
+
+# Archivos de prueba
+/test/
+/web/test/
+/web/common/.sass-cache/
+
+# Archivos generados/configuración local
+META-INF
+
+# Archivos temporales de diagnóstico/pruebas
+/capabilities.xml
+/chl_capabilities.xml
+/layer_javap.txt

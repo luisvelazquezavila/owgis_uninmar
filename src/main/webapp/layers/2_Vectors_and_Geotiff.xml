@@ -1,0 +1,58 @@
+<MenuConf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+	<!-- This are the menus that are available to display entries -->
+	<Menus>
+		<Menu ID="lev1" EN="Level 1" ES="Nivel 1" HI_IN="स्तर १"/>
+		<Menu ID="vectest" EN="Vector layer" ES="Ejemplo Vectorial" HI_IN="वेक्टर परत"/>
+		<Menu ID="veccqltest" EN="Vector CQL demo" ES="Ejemplo CQL" HI_IN="वेक्टर CQL"/>
+		<Menu ID="geotifftest" EN="Raster (GeoTIFF)" ES="Ejemplo capa raster " HI_IN="रेस्टर (geotiff)"/>
+		<Menu ID="vector" EN="Vector Layers" ES="Vectoriales" HI_IN="वेक्टर परते"/>
+		<Menu ID="raster" EN="Raster Layers" ES="Capas Raster" HI_IN="वेक्टर परते"/>
+		<Menu ID="states" EN="US states" ES="Estados" HI_IN="अमेरिकन राज्यों"/>
+		<Menu ID="statesdyn" EN="Dynamic US states" ES="Estados (dinamicos)" HI_IN="अमेरिकन राज्यों"/> 
+                <Menu ID="countries" EN="Countries" ES="Paises" HI_IN="देशों"/> 
+                <Menu ID="count" EN="Countries" ES="Paises" HI_IN="देशों"/> 
+                <Menu ID="test" EN="Testing" />
+	</Menus>
+
+	<!-- ============================================================
+	     CAPAS PROBLEMÁTICAS COMENTADAS (apuntaban a 132.248.8.238:8080)
+	     Causaban errores de red (ERR_CONNECTION_TIMED_OUT).
+	     Si en el futuro se necesita alguna, se puede descomentar.
+	     ============================================================ -->
+
+	<!-- 
+	<MainLayers BBOX="-175.22056447761656,-41.29997393927641,179.21664709402887,64.15002361973922"
+				server="http://132.248.8.238:8080/geoserver/wms"
+				vectorLayer="true">
+		<layer Menu='EXS,vector,vectest' EN='Vector layer demo. World big cities. Default zoom and center.'
+			   ES='Ejemplo de una capa vectorial. Grandes ciudades del mundo' HI_IN='वेक्टर परते का प्रदर्शन. दुनिया के बड़े शहरों.' name='demo:world_cities' 
+               zoom="1"
+               center="-100,22"/>
+	</MainLayers>
+	-->
+
+	<!-- 
+	<MainLayers BBOX="-175.22056447761656,-41.29997393927641,179.21664709402887,64.15002361973922"
+				server="http://132.248.8.238:8080/geoserver/wms"
+				vectorLayer="true"
+				cqlcols="NAME">
+		<layer Menu="EXS,vector,veccqltest" name="demo:world_cities" 
+			   EN="Demo CQL filtering. Estimated population in 2010 more 2 million" 
+			   ES="Ejemplo de filtrado con CQL. Grandes ciudades con mas de 2 millones de personas en 2010"
+			   HI_IN="CQL फ़िल्टरिंग का प्रदर्शन. अनुमानित जनसंख्या वर्ष २०१०  में २०  लाख से अधिक"
+			   CQL="MAX_POP10 > 2000000" />
+	</MainLayers>
+	-->
+
+	<!-- 
+	<MainLayers BBOX="-125.0,4.999999999999975,-75.00000000000003,35.0"
+				server="http://132.248.8.238:8080/geoserver/wms">
+		<layer Menu="EXS,raster,geotifftest" 
+			   EN="Demo of a raster (GeoTIFF) layer. Maximum average temperature of July month." 
+			   ES="Ejemplo de capa raster (GeoTIFF). Temperatura maxima promedio del mes de julio." 
+			   HI_IN="रेस्टर (geotiff) परत का प्रदर्शन. जुलाई माह का अधिकतम औसत तापमान"
+			   name="demo:temp_max_mex"/>
+	</MainLayers>
+	-->
+
+</MenuConf>

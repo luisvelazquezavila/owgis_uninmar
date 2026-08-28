@@ -1,0 +1,31 @@
+<MenuConf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+    <Menus>
+        <Menu ID="generated" EN="Base Layers" ES="Capas Base"/>
+        <Menu ID="Land" EN="Land" ES="Tierra"/>
+        <Menu ID="LandMask" EN="LandMask" ES="Máscara Tierra"/>
+        <Menu ID="Coastlines" EN="Coastlines" ES="Líneas de Costa"/>
+        <Menu ID="LakesAndRivers" EN="Lakes and Rivers" ES="Lagos y Ríos"/>
+        <Menu ID="Nations" EN="National Boundaries" ES="Límites Nacionales"/>
+        <Menu ID="States" EN="State Boundaries" ES="Límites Estatales"/>
+        <!-- 👇 NUEVO MENÚ AGREGADO PARA AGRUPAR LAS CAPAS DE CLOROFILA 👇 -->
+        <Menu ID="Mazatlan_Chlorophyll" EN="Mazatlán Chlorophyll (MDN)" ES="Clorofila Mazatlán (MDN)"/>
+    </Menus>
+
+    <OptionalLayers BBOX="-180.0,-90,180.0,90" format="image/png" server="http://erddap.icmyl.unam.mx/uninmar/erddap/wms/MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN/request" vectorLayer="false">
+        <!-- Capas base (Ya las tenías) -->
+        <layer Menu="generated,Land" EN="Land" ES="Land" name="Land" selected="false" queryable="false"/>
+        <layer Menu="generated,LandMask" EN="LandMask" ES="LandMask" name="LandMask" selected="false" queryable="false"/>
+        <layer Menu="generated,Coastlines" EN="Coastlines" ES="Coastlines" name="Coastlines" selected="false" queryable="false"/>
+        <layer Menu="generated,LakesAndRivers" EN="Lakes and Rivers" ES="Lakes and Rivers" name="LakesAndRivers" selected="false" queryable="false"/>
+        <layer Menu="generated,Nations" EN="National Boundaries" ES="National Boundaries" name="Nations" selected="false" queryable="false"/>
+        <layer Menu="generated,States" EN="State Boundaries" ES="State Boundaries" name="States" selected="false" queryable="false"/>
+
+        <!-- 👇 NUEVA CAPA AGREGADA: l2_flags (Máscara de nubes) 👇 -->
+        <layer Menu="Mazatlan_Chlorophyll" 
+               EN="MDN chlorophyll-a - l2_flags (Máscara)" 
+               ES="MDN chlorophyll-a - l2_flags (Máscara)" 
+               name="MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:l2_flags" 
+               selected="false" 
+               queryable="false"/>
+    </OptionalLayers>
+</MenuConf>

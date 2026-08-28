@@ -1,0 +1,47 @@
+<MenuConf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+	<Menus>
+		<Menu ID="EXS" EN="Examples" ES="Ejemplos"/>
+		<Menu ID="ncwms" EN="ncWMS Layers" ES="Capas ncWMS"/>
+		<Menu ID="ERDDAP" EN="ERDDAP" ES="ERDDAP"/>
+		<Menu ID="WMS" EN="WMS Layers" ES="Capas WMS"/>
+		<Menu ID="mldMean" EN="Mixed Layer Depth Mean" ES="Profundidad media de capa mezclada"/>
+		<Menu ID="Mazatlan_Chlorophyll" EN="Mazatlán Chlorophyll (MDN)" ES="Clorofila Mazatlán (MDN)"/>
+	</Menus>
+
+	<!-- BLOQUE 1: ncWMS (VACÍO, con ncWMStwo="true") -->
+	<!-- Este bloque vacío engaña a Java para que no falle -->
+	<MainLayers BBOX="-98.0,18.09164810180664,-76.400024,31.960647583007812" 
+				format="image/gif"  
+				server="http://132.248.8.238:8080/ncWMS_2015/wms"
+				ncWMStwo="true">
+	</MainLayers>
+
+	<!-- BLOQUE 2: mldMean (DESACTIVADO para que no se vea, pero mantiene la lista llena) -->
+	<!-- Es la capa que el sistema usará como "índice 0" para evitar el error de Java -->
+	<MainLayers BBOX="-179.0,-89.0,179.0,89.0"
+				format="image/png"
+				server="http://erddap.icmyl.unam.mx/oceficc/erddap/wms/mx_unam_icml_clim_glo_mld_2deg_p1m_v1_all/request">
+		<layer Menu="ERDDAP,WMS,mldMean"
+			   EN="ERDDAP - Mixed Layer Depth Mean"
+			   ES="ERDDAP - Profundidad media de capa mezclada"
+			   name="mld_mean"
+			   selected="false"
+			   queryable="false"/>
+	</MainLayers>
+
+	<!-- BLOQUE 3: LA CAPA DE CLOROFILA DE MAZATLÁN (ACTIVADA CON TIEMPO) -->
+	<MainLayers BBOX="-106.95829,22.50700,-105.87737,23.50776"
+				format="image/png"
+				server="https://erddap.icmyl.unam.mx/uninmar/erddap/wms/MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN/request">
+		<layer Menu="ERDDAP,WMS,Mazatlan_Chlorophyll"
+			   EN="Chlorophyll-a Mazatlán (MDN) [T13QCF]"
+			   ES="Clorofila-a Mazatlán (MDN) [T13QCF]"
+			   name="MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn"
+			   selected="true"
+			   queryable="false"
+			   timeEnabled="true"
+			   timeHierarchyEnabled="true"
+			   timeDimensionName="time"
+			   timeFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+	</MainLayers>
+</MenuConf>

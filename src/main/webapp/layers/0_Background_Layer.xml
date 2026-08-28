@@ -1,0 +1,12 @@
+<MenuConf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="schema.xsd">
+
+    <BackgroundLayers
+        server="https://ows.terrestris.de/osm/service?"
+        BBOX="-180,-90,180,90">
+
+        <layer name="OSM-WMS" featureInfo="none"/>
+
+    </BackgroundLayers>
+
+</MenuConf>

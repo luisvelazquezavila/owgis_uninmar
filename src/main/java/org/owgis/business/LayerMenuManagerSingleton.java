@@ -60,6 +60,18 @@ import java.util.Map;
  */
 public class LayerMenuManagerSingleton {
     
+    static {
+        System.out.println("################################################");
+        System.out.println("### CLASE LayerMenuManagerSingleton CARGADA ###");
+        System.out.println("### VERSION PRUEBA 31-08-2026                 ###");
+        System.out.println("### CODE SOURCE = " +
+                LayerMenuManagerSingleton.class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation());
+        System.out.println("################################################");
+    }
+    
     private static LayerMenuManagerSingleton instance = null;
     private TreeNode rootMenu;// Contains the menu of the background and main layers
     private TreeNode rootVectorMenu;// Contains the menu for the vector or optional layers
@@ -80,6 +92,15 @@ public class LayerMenuManagerSingleton {
      * @param {String} layerType - background, main, or vector layer
      */
     private void addLayers(Element layerConf, String layerType) throws XMLFilesException {
+        
+        System.out.println();
+        System.out.println("############ ADDLAYERS LLAMADO ############");
+        System.out.println("layerType = [" + layerType + "]");
+        System.out.println("layerConf name = [" + layerConf.getName() + "]");
+        System.out.println("layerConf children = [" + layerConf.getChildren().size() + "]");
+        System.out.println("############################################");
+        
+        System.out.println("########### VERSION PRUEBA 31-08-2026 ###########");
         
         System.out.println();
         System.out.println("################################################");
@@ -146,6 +167,24 @@ public class LayerMenuManagerSingleton {
         System.out.println("==========================================");
         
         List layers = layerConf.getChildren();
+        
+        System.out.println();
+        System.out.println("========== CONTENIDO DE layerConf ==========");
+        System.out.println("layerType = [" + layerType + "]");
+        System.out.println("layerConf = [" + layerConf.getName() + "]");
+        System.out.println("Número de hijos = " + layers.size());
+
+        for (Iterator debugIt = layers.iterator(); debugIt.hasNext();) {
+            Element debugElem = (Element) debugIt.next();
+
+            System.out.println(
+                "HIJO -> name=[" +
+                debugElem.getAttributeValue("name") +
+                "]"
+            );
+        }
+
+        System.out.println("============================================");
         
         //we iterate through this loop which is going through each child of a layer
         for (Iterator it = layers.iterator(); it.hasNext();) {
@@ -233,8 +272,39 @@ public class LayerMenuManagerSingleton {
                 "]"
             );
             System.out.println("============================================");
+            
+            System.out.println("========== ANTES DE updateFields ==========");
+            System.out.println("layerElem attributes = " + layerElem.getAttributes());
+
+            if (layerElem.getAttributeValue("name") != null &&
+                layerElem.getAttributeValue("name").toLowerCase().contains("chl_mdn")) {
+
+                System.out.println("");
+                System.out.println("################################################");
+                System.out.println("########### ENCONTRADO CHL_MDN #################");
+                System.out.println("name   = [" + layerElem.getAttributeValue("name") + "]");
+                System.out.println("server = [" + layerElem.getAttributeValue("server") + "]");
+                System.out.println("################################################");
+            }
+
+            System.out.println("============================================");
+
                                    
             Layer newLayer = updateFields(layerElem, groupLayer);
+            
+            if (newLayer != null &&
+                "MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn".equals(newLayer.getName())) {
+
+                System.out.println("");
+                System.out.println("==============================================");
+                System.out.println("===== CHL_MDN DESPUES DE updateFields =======");
+                System.out.println("name          = [" + newLayer.getName() + "]");
+                System.out.println("server        = [" + newLayer.getServer() + "]");
+                System.out.println("isncWMS       = " + newLayer.isncWMS());
+                System.out.println("multipleDates = " + newLayer.isMultipleDates());
+                System.out.println("identity      = " + System.identityHashCode(newLayer));
+                System.out.println("==============================================");
+            }
             
             System.out.println("========== TEST FLOW 1 ==========");
             System.out.println("addLayers -> updateFields terminado");
@@ -828,6 +898,12 @@ public class LayerMenuManagerSingleton {
      * Creates the initial Tree of layers from the specified XML files.
      */
 private void createMenuFromXMLfiles() throws XMLFilesException {
+    
+    System.out.println("========== CREATE MENU FROM XML ==========");
+    System.out.println("### VERSION PRUEBA 31-08-2026");
+    System.out.println("### xmlFolder = [" + xmlFolder + "]");
+    System.out.println("### xmlFiles = " + java.util.Arrays.toString(xmlFiles));
+    System.out.println("==========================================");
 
     System.out.println("==============================================");
     System.out.println("ENTRO A createMenuFromXMLfiles()");

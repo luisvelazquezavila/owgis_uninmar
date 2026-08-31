@@ -139,6 +139,15 @@ public class MapViewerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
             
+            System.out.println("################################################");
+            System.out.println("### MAPVIEWERSERVLET INIT - PRUEBA 31-08-2026 ###");
+            System.out.println("### CODE SOURCE = " +
+                    MapViewerServlet.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation());
+            System.out.println("################################################");
+            
             try {
                 java.io.FileWriter fw = new java.io.FileWriter(
                     "C:\\apache-tomcat-9\\mapviewer_init_test.txt",

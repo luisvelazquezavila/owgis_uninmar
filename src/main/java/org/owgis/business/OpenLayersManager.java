@@ -233,6 +233,15 @@ public class OpenLayersManager {
             if (mainLayers != null && layerIndex >= 0 && layerIndex < mainLayers.size()) {
                 currentLayer = mainLayers.get(layerIndex);
                 
+                System.out.println();
+                System.out.println("############################################################");
+                System.out.println("### DEBUG CREATE OPENLAY CONFIG - CURRENT LAYER");
+                System.out.println("### name = [" + currentLayer.getName() + "]");
+                System.out.println("### server = [" + currentLayer.getServer() + "]");
+                System.out.println("### multipleDates = [" + currentLayer.isMultipleDates() + "]");
+                System.out.println("### layerDetails = [" + currentLayer.getLayerDetails() + "]");
+                System.out.println("############################################################");
+                
                 System.out.println("========== MAINLAYER SELECCIONADO ==========");
                 System.out.println("layerIndex = " + layerIndex);
                 System.out.println("mainLayers.size() = " + mainLayers.size());
@@ -358,7 +367,17 @@ public class OpenLayersManager {
             );
 
             if (serverUrl != null && layerName != null) {
+                
+                System.out.println("############ PASO A ############");
+                System.out.println("Voy a llamar getDatesFromServer()");
+                System.out.println("serverUrl = [" + serverUrl + "]");
+                System.out.println("layerName = [" + layerName + "]");
+                
                 datesJson = getDatesFromServer(serverUrl, layerName);
+                
+                System.out.println("############ PASO B ############");
+                System.out.println("getDatesFromServer() TERMINÓ");
+                System.out.println("datesJson = " + datesJson);
                 
                 System.out.println("OWGIS TIME DEBUG - datesJson recibido: " + datesJson.length());
                 
@@ -377,10 +396,33 @@ public class OpenLayersManager {
                         && !datesJson.equals("[]")) {
 
                     System.out.println("OWGIS TIME DEBUG - ERDDAP tiene fechas");
+                    
+                    System.out.println("############################################################");
+                    System.out.println("### DEBUG CREATE OPENLAY CONFIG - ENTRO A ERDDAP TIENE FECHAS");
+                    System.out.println("### currentLayer.name = [" + currentLayer.getName() + "]");
+                    System.out.println("### currentLayer.identity = [" 
+                            + System.identityHashCode(currentLayer) + "]");
+                    System.out.println("### datesJson.length = [" + datesJson.length() + "]");
+                    System.out.println("### isTimeEnabledLayer ANTES = [" + isTimeEnabledLayer + "]");
+                    System.out.println("### multipleDates ANTES = [" + currentLayer.isMultipleDates() + "]");
+                    System.out.println("############################################################");
 
                     isTimeEnabledLayer = true;
+                    
+                    System.out.println("### isTimeEnabledLayer DESPUES = [" + isTimeEnabledLayer + "]");
 
                     currentLayer.setMultipleDates(true);
+                    
+                    System.out.println("### setMultipleDates(true) TERMINÓ");
+                    System.out.println("### multipleDates DESPUES = [" + currentLayer.isMultipleDates() + "]");
+
+                    System.out.println("############################################################");
+                    System.out.println("### DEBUG CREATE OPENLAY CONFIG - ANTES DEL IF CHL_MDN");
+                    System.out.println("### currentLayer.name = [" + currentLayer.getName() + "]");
+                    System.out.println("### comparacion = ["
+                            + "MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn".equals(currentLayer.getName())
+                            + "]");
+                    System.out.println("############################################################");
 
                     System.out.println(
                         "OWGIS TIME DEBUG - currentLayer.multipleDates = "
@@ -388,37 +430,47 @@ public class OpenLayersManager {
                     );
                 }
                 
+                System.out.println("############################################################");
+                System.out.println("### PASO C - JUSTO ANTES DEL IF CHL_MDN");
+                System.out.println("### currentLayer = " + currentLayer);
+                System.out.println("### currentLayer.name = [" + currentLayer.getName() + "]");
+                System.out.println("### comparacion CHL_MDN = ["
+                        + "MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn".equals(currentLayer.getName())
+                        + "]");
+                System.out.println("############################################################");
+
                 if ("MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn".equals(currentLayer.getName())) {
 
-                    System.out.println("========== ANTES DE setDatesWithData ==========");
+                    System.out.println("############################################################");
+                    System.out.println("### PASO D - ENTRE AL IF CHL_MDN");
+                    System.out.println("### ANTES DE setDatesWithData");
+                    System.out.println("### currentLayer.name = [" + currentLayer.getName() + "]");
+                    System.out.println("### identity = [" + System.identityHashCode(currentLayer) + "]");
+                    System.out.println("### datesJson.length = [" + datesJson.length() + "]");
+                    System.out.println("### multipleDates = [" + currentLayer.isMultipleDates() + "]");
+                    System.out.println("############################################################");
 
-                    System.out.println(
-                        "currentLayer.name = [" + currentLayer.getName() + "]"
-                    );
-
-                    System.out.println(
-                        "currentLayer.identity = "
-                        + System.identityHashCode(currentLayer)
-                    );
-
-                    System.out.println(
-                        "datesJson length = " + datesJson.length()
-                    );
-
-                    System.out.println(
-                        "datesJson primeros caracteres = "
-                        + datesJson.substring(0, Math.min(500, datesJson.length()))
-                    );
-
-                    System.out.println(
-                        "currentLayer.multipleDates = "
-                        + currentLayer.isMultipleDates()
-                    );
-
-                    System.out.println("===============================================");
                 }
                 
+                System.out.println();
+                System.out.println("############################################################");
+                System.out.println("### DEBUG CREATE OPENLAY CONFIG - ANTES setDatesWithData");
+                System.out.println("### name = [" + currentLayer.getName() + "]");
+                System.out.println("### server = [" + currentLayer.getServer() + "]");
+                System.out.println("### multipleDates = [" + currentLayer.isMultipleDates() + "]");
+                System.out.println("### layerDetails = [" + currentLayer.getLayerDetails() + "]");
+                System.out.println("############################################################");
+                
                 currentLayer.setDatesWithData(datesJson);
+                
+                System.out.println();
+                System.out.println("############################################################");
+                System.out.println("### DEBUG CREATE OPENLAY CONFIG - DESPUES setDatesWithData");
+                System.out.println("### name = [" + currentLayer.getName() + "]");
+                System.out.println("### server = [" + currentLayer.getServer() + "]");
+                System.out.println("### multipleDates = [" + currentLayer.isMultipleDates() + "]");
+                System.out.println("### layerDetails = [" + currentLayer.getLayerDetails() + "]");
+                System.out.println("############################################################");
                 
                 System.out.println("========== DESPUES DE setDatesWithData ==========");
 

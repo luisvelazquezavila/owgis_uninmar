@@ -130,6 +130,7 @@ public class Layer {
 	public Layer(){
             
                 System.out.println("### ENTER Layer() ###");
+                System.out.println("### Layer identity = " + System.identityHashCode(this));
             
 		this.bbox = new BoundaryBox("-180,90,-90,180");
 		this.style = "";
@@ -250,6 +251,7 @@ public class Layer {
 			double defParticleSpeed) {
             
                 System.out.println("### ENTER Layer(BoundaryBox,...) ###");
+                System.out.println("### Layer identity = " + System.identityHashCode(this));
 		
 		this.bbox = bbox;
 		this.style = style;
@@ -549,26 +551,42 @@ public class Layer {
         
         public void setDatesWithData(String datesJson) {
             try {
+
+                System.out.println("############################################################");
+                System.out.println("### SET DATES WITH DATA - INICIO");
+                System.out.println("### Layer = [" + this.getName() + "]");
+                System.out.println("### identity = [" + System.identityHashCode(this) + "]");
+                System.out.println("### datesJson null = [" + (datesJson == null) + "]");
+
                 if (datesJson != null && !datesJson.equals("[]") && !datesJson.equals("")) {
+
+                    System.out.println("### datesJson.length = [" + datesJson.length() + "]");
+
+                    System.out.println("### layerDetails ANTES = "
+                            + this.layerDetails);
+
+                    System.out.println("### AGREGANDO datesWithData...");
 
                     this.layerDetails.put(
                         "datesWithData",
                         new JSONObject(datesJson)
                     );
 
-                    System.out.println(
-                        "OWGIS LAYER DETAILS DEBUG - datesWithData agregado"
-                    );
+                    System.out.println("### datesWithData AGREGADO");
 
-                    System.out.println(
-                        "OWGIS LAYER DETAILS DEBUG - length = "
-                        + datesJson.length()
-                    );
+                    System.out.println("### layerDetails DESPUES = "
+                            + this.layerDetails);
 
-                    System.out.println(
-                        "OWGIS LAYER DETAILS DEBUG - layerDetails AHORA = "
-                        + this.layerDetails.toString()
-                    );
+                    System.out.println("### layerDetails.has(datesWithData) = "
+                            + this.layerDetails.has("datesWithData"));
+
+                    System.out.println("############################################################");
+
+                } else {
+
+                    System.out.println("### NO SE AGREGÓ datesWithData");
+                    System.out.println("### datesJson estaba vacío o era null");
+                    System.out.println("############################################################");
                 }
 
             } catch (Exception e) {

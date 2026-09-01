@@ -79,6 +79,8 @@ This is the main jsp file that forms the html webpage. It contains the skeleton 
                 <!-- Window with the custom styling for the currents -->
                 <%@include file="Layouts/DraggableWindows/NcWMS/StreamLines.jsp" %>  
             </c:if>
+                
+            <%@include file="Layouts/DraggableWindows/Time/Calendars.jsp" %>
 
             <c:if test='${ncwms}'>
                 <%@include file="Layouts/DraggableWindows/NcWMS/NcWMSOptions.jsp" %>  

@@ -463,6 +463,53 @@ public class OpenLayersManager {
                 
                 currentLayer.setDatesWithData(datesJson);
                 
+                String finalLayerDetails = currentLayer.getLayerDetails();
+
+                System.out.println("### FINAL layerDetails length = "
+                        + (finalLayerDetails == null ? "NULL" : finalLayerDetails.length()));
+
+                System.out.println("### FINAL layerDetails contiene datesWithData = "
+                        + (finalLayerDetails != null && finalLayerDetails.contains("datesWithData")));
+                
+                System.out.println("############################################################");
+                System.out.println("### PASO E - DESPUES DE setDatesWithData");
+                System.out.println("### currentLayer.name = [" + currentLayer.getName() + "]");
+                System.out.println("### identity = [" + System.identityHashCode(currentLayer) + "]");
+                System.out.println("### multipleDates = [" + currentLayer.isMultipleDates() + "]");
+                System.out.println("### layerDetails = [" + currentLayer.getLayerDetails() + "]");
+                
+                System.out.println("############################################################");
+                System.out.println("### DEBUG POST setDatesWithData");
+                System.out.println("### Layer identity = " + System.identityHashCode(currentLayer));
+                System.out.println("### Layer name = [" + currentLayer.getName() + "]");
+                System.out.println("### layerDetails = " + currentLayer.getLayerDetails());
+                System.out.println("### layerDetails contiene datesWithData = "
+                        + currentLayer.getLayerDetails().contains("datesWithData"));
+                System.out.println("############################################################");
+
+                try {
+                    JSONObject debugDetails =
+                        new JSONObject(currentLayer.getLayerDetails());
+
+                    System.out.println(
+                        "### layerDetails.has(datesWithData) = "
+                        + debugDetails.has("datesWithData")
+                    );
+
+                    if (debugDetails.has("datesWithData")) {
+                        System.out.println(
+                            "### datesWithData = "
+                            + debugDetails.get("datesWithData")
+                        );
+                    }
+
+                } catch (Exception e) {
+                    System.err.println("### ERROR LEYENDO layerDetails DESPUES DE setDatesWithData");
+                    e.printStackTrace();
+                }
+
+                System.out.println("############################################################");
+                
                 System.out.println();
                 System.out.println("############################################################");
                 System.out.println("### DEBUG CREATE OPENLAY CONFIG - DESPUES setDatesWithData");
@@ -630,6 +677,8 @@ public class OpenLayersManager {
     }
 
     private String getDatesFromServer(String serverUrl, String layerName) {
+        
+        System.out.println("### getDatesFromServer ###");
 
         String datesJson = "{}";
 
@@ -727,6 +776,12 @@ public class OpenLayersManager {
 
                         String[] lines =
                             csv.split("\\r?\\n");
+                        
+                        System.out.println("### CSV lines = " + lines.length);
+
+                        for (int i = 0; i < Math.min(lines.length, 10); i++) {
+                            System.out.println("### CSV line[" + i + "] = [" + lines[i] + "]");
+                        }
 
                         /*
                          * =====================================================

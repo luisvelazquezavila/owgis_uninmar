@@ -68,6 +68,13 @@ owgis.ncwms.calendars.updatehours = function (hours, cal) {
         currSelect.parent().show();
     } else {//If there is only one, then we 'hide' the selection.
         severalTimes = false;//Indicates that we don't have more than one possible time
+
+        if (cal === owgis.constants.startcal) {
+            layerDetails.starttimeSteps = hours.timesteps;
+        } else {
+            layerDetails.endtimeSteps = hours.timesteps;
+        }
+
         currSelect.parent().hide();
     }
     setCurrentTime(cal);
@@ -121,6 +128,191 @@ function displayCalendars(disp) {
     $("#cal-end").css("visibility", visib);
 }
 
+/**
+ * Construye el selector jerárquico de fechas:
+ * Año -> Mes -> Día
+ *
+ * Utiliza directamente layerDetails.datesWithData,
+ * por lo que no genera fechas artificiales.
+ */
+function initErddapDateTree() {
+
+    var tree = $("#erddap-date-tree");
+
+    if (tree.length === 0) {
+        console.warn("OWGIS DATE TREE - Contenedor no encontrado");
+        return;
+    }
+
+    tree.empty();
+
+    var datesWithData = layerDetails.datesWithData;
+
+    if (typeof datesWithData === "undefined" || datesWithData === null) {
+        console.warn("OWGIS DATE TREE - datesWithData no disponible");
+        return;
+    }
+
+    var monthNames = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+    ];
+
+    var years = Object.keys(datesWithData).sort(function (a, b) {
+        return parseInt(a, 10) - parseInt(b, 10);
+    });
+
+    console.log("OWGIS DATE TREE - Años encontrados:", years);
+
+    years.forEach(function (year) {
+
+        var yearContainer = $("<div>")
+                .addClass("erddap-tree-year");
+
+        var yearHeader = $("<div>")
+                .addClass("erddap-tree-year-header")
+                .text("▶ " + year);
+
+        var monthsContainer = $("<div>")
+                .addClass("erddap-tree-months")
+                .hide();
+
+        yearHeader.on("click", function () {
+
+            monthsContainer.toggle();
+
+            var visible = monthsContainer.is(":visible");
+
+            yearHeader.text((visible ? "▼ " : "▶ ") + year);
+        });
+
+        yearContainer.append(yearHeader);
+
+        var months = Object.keys(datesWithData[year])
+                .filter(function (month) {
+                    return owgis.utils.IsNumeric(month);
+                })
+                .sort(function (a, b) {
+                    return parseInt(a, 10) - parseInt(b, 10);
+                });
+
+        months.forEach(function (month) {
+
+            var monthNumber = parseInt(month, 10);
+
+            var monthContainer = $("<div>")
+                    .addClass("erddap-tree-month");
+
+            var monthHeader = $("<div>")
+                    .addClass("erddap-tree-month-header")
+                    .text("▶ " + monthNames[monthNumber]);
+
+            var daysContainer = $("<div>")
+                    .addClass("erddap-tree-days")
+                    .hide();
+
+            monthHeader.on("click", function () {
+
+                daysContainer.toggle();
+
+                var visible = daysContainer.is(":visible");
+
+                monthHeader.text(
+                    (visible ? "▼ " : "▶ ")
+                    + monthNames[monthNumber]
+                );
+            });
+
+            monthContainer.append(monthHeader);
+
+            var days = datesWithData[year][month]
+                    .slice()
+                    .sort(function (a, b) {
+                        return parseInt(a, 10) - parseInt(b, 10);
+                    });
+
+            days.forEach(function (day) {
+
+                var dayText = ("0" + day).slice(-2);
+
+                var dayButton = $("<div>")
+        .addClass("erddap-tree-day")
+        .text(dayText)
+        .attr(
+            "data-date",
+            year + "-" +
+            ("0" + (monthNumber + 1)).slice(-2) + "-" +
+            dayText
+        );
+
+        dayButton.on("click", function () {
+
+            var selectedDate = $(this).attr("data-date");
+
+            var timesWithData = layerDetails.timesWithData || {};
+            var availableTime = timesWithData[selectedDate];
+
+            console.log("OWGIS DATE TREE - Día seleccionado:", selectedDate);
+            console.log("OWGIS DATE TREE - Hora disponible:", availableTime);
+
+            if (!availableTime) {
+                console.warn(
+                        "OWGIS DATE TREE - No existe hora para:",
+                        selectedDate
+                        );
+                return;
+            }
+
+            if (Array.isArray(availableTime)) {
+                availableTime = availableTime[0];
+            }
+
+            var isoTime = selectedDate + "T" + availableTime;
+
+            console.log(
+                    "OWGIS DATE TREE - Actualizando TIME:",
+                    isoTime
+                    );
+
+            owgis.layers.updateMainLayerParam(
+                    "TIME",
+                    isoTime
+                    );
+
+            owgis.kml.updateTitleAndKmlLink();
+
+            $(".erddap-tree-day").removeClass("selected");
+            $(this).addClass("selected");
+
+        });
+        
+        daysContainer.append(dayButton);
+    });
+
+        monthContainer.append(daysContainer);
+        monthsContainer.append(monthContainer);
+    });
+
+    yearContainer.append(monthsContainer);
+    tree.append(yearContainer);
+    
+    });
+
+    console.log(
+        "OWGIS DATE TREE - Arbol generado correctamente"
+        );
+}
+
 /* 
  * This function initializes all the variables for the calendars
  * an it is called from 'animation.js' when the layer is
@@ -140,6 +332,9 @@ function initCalendars() {
     var maxDay = -1;
 
     if (typeof datesWithData !== "undefined") {
+        
+        initErddapDateTree();
+
 
         for (var year in datesWithData) {
             if (typeof datesWithData[year] !== 'function') { // avoid built-in functions
@@ -388,8 +583,12 @@ function updateCalendarOpts(calUpdated, forcedDate) {
 
                 if (availableTime) {
 
+                    if (!Array.isArray(availableTime)) {
+                        availableTime = [availableTime];
+                    }
+
                     owgis.ncwms.calendars.updatehours(
-                        [availableTime],
+                        { timesteps: availableTime },
                         owgis.constants.startcal
                     );
                 }
@@ -447,8 +646,12 @@ function updateCalendarOpts(calUpdated, forcedDate) {
 
                 if (availableTime) {
 
+                    if (!Array.isArray(availableTime)) {
+                        availableTime = [availableTime];
+                    }
+
                     owgis.ncwms.calendars.updatehours(
-                        [availableTime],
+                        { timesteps: availableTime },
                         owgis.constants.endcal
                     );
                 }
@@ -627,7 +830,14 @@ currTimeStr = undefined;
 
 //Get hours from select and update date
 if (!_.isUndefined(currTimeStr)){
-requestedDate = new Date(currCal.val() + "T" + currTimeStr);
+    console.log("OWGIS DATE DEBUG - currCal.val() =", currCal.val());
+    console.log("OWGIS DATE DEBUG - currTimeStr =", currTimeStr);
+    console.log("OWGIS DATE DEBUG - fecha construida =", currCal.val() + "T" + currTimeStr);
+
+    requestedDate = new Date(currCal.val() + "T" + currTimeStr);
+
+    console.log("OWGIS DATE DEBUG - requestedDate =", requestedDate);
+    console.log("OWGIS DATE DEBUG - requestedDate.getTime() =", requestedDate.getTime());
         } else{
 requestedDate = new Date(currDateStr);
         }

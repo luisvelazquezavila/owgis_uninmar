@@ -1,3 +1,4 @@
+```jsp
 <div class="transDraggableWindow menuHidden toolTip container-fluid"
      id="CalendarsAndStopContainer"
      title="<fmt:message key='help.tooltip.calender'/>">
@@ -46,4 +47,19 @@
             </select>
         </div>
     </div>
+
+    <!-- Selector jerárquico de fechas ERDDAP -->
+    <div class="row" id="erddap-date-tree-container" style="margin-top: 10px; overflow-y: auto; flex: 1;">
+        <div class="col-xs-12">
+            <div class="title text-center">
+                <span class="invShadow">Fechas disponibles</span>
+            </div>
+
+            <div id="erddap-date-tree">
+                <!-- El árbol Año ? Mes ? Día se generará aquí -->
+            </div>
+        </div>
+    </div>
+
 </div>
+```

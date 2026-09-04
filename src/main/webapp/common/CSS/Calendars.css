@@ -67,6 +67,7 @@
   top: 209px;
   left: 50px;
   width: fit-content !important;
+  height: 55vh;
   /*width:$containerSize;*/
 }
 

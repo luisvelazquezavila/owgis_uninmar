@@ -158,7 +158,11 @@ function updateMenusDisplayVisibility(status){
         $("#lineToggle").hide();
         $("#downloadDataParent").show();
         $("#elevationParent").hide();
-        $('#CalendarsAndStopContainer').hide();
+        if(_mainlayer_multipleDates){
+            $('#CalendarsAndStopContainer').show("fade");
+        }else{
+            $('#CalendarsAndStopContainer').hide();
+        }
     }
 }
 

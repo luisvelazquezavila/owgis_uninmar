@@ -569,6 +569,7 @@
     <!-- Optional Layers Combinado -->
     <OptionalLayers BBOX="-180.0,-90,180.0,90" format="image/png" server="http://erddap.icmyl.unam.mx/uninmar/erddap/wms/MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN/request" vectorLayer="false">
         <!-- Capas base originales de tu ERDDAP -->
+        <layer Menu="ERDDAP,Mazatlan_Chlorophyll" EN="Chlorophyll-a Mazatlán (MDN) [T13QCF]" ES="Clorofila-a Mazatlán (MDN) [T13QCF]" name="MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn" selected="false" queryable="false" timeEnabled="true" timeHierarchyEnabled="true" timeDimensionName="time" timeFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" />
         <layer Menu="generated,Land" EN="Land" ES="Land" name="Land" selected="false" queryable="false"/>
         <layer Menu="generated,LandMask" EN="LandMask" ES="LandMask" name="LandMask" selected="false" queryable="false"/>
         <layer Menu="generated,Coastlines" EN="Coastlines" ES="Coastlines" name="Coastlines" selected="false" queryable="false"/>

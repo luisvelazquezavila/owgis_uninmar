@@ -1390,6 +1390,8 @@ private void createMenuFromXMLfiles() throws XMLFilesException {
         System.out.println(
             "layer.name = " + layer.getName()
         );
+        
+        System.out.println("layer.idLayer = " + layer.getIdLayer());
 
         System.out.println(
             "layer.identityHashCode = "

@@ -132,6 +132,12 @@ public class OpenLayersManager {
             public String createOpenLayConfig(int[] idsBaseLayers, int[] extraLayers, String language, String backgroundLayer) {
         this.language = language;
         if (extraLayers == null) extraLayers = new int[0];
+        
+        System.out.println("========== EXTRA LAYERS RECEIVED ==========");
+        System.out.println("extraLayers = " + java.util.Arrays.toString(extraLayers));
+        System.out.println("extraLayers length = " + extraLayers.length);
+        System.out.println("===========================================");
+        
         if (idsBaseLayers == null) idsBaseLayers = new int[0];
 
         String result = "";
@@ -142,13 +148,101 @@ public class OpenLayersManager {
         String datesJson = "[]";
 
         Layer currentLayer = null;
+        Layer temporalLayer = null;
+        int temporalLayerOpenLayersIndex = -1;
         
         System.out.println("========== OWGIS TIME DEBUG ==========");
         System.out.println("idsBaseLayers length: " + idsBaseLayers.length);
+        System.out.println("extraLayers length: " + extraLayers.length);
         
         System.out.println("OWGIS TIME DEBUG - currentLayer: " + currentLayer);
+        
+        // ============================================================
+        // BUSCAR CAPA TEMPORAL ENTRE LAS OPTIONAL LAYERS SELECCIONADAS
+        // ============================================================
+        System.out.println("========== BUSQUEDA CAPA TEMPORAL OPTIONAL ==========");
+
+        if (extraLayers != null && extraLayers.length > 0) {
+
+            ArrayList<Layer> vectorLayers = layersManager.getVectorLayers();
+
+            for (int i = 0; i < extraLayers.length; i++) {
+
+                int vectorIndex = extraLayers[i];
+
+                if (vectorIndex >= 0 && vectorIndex < vectorLayers.size()) {
+
+                    Layer optionalLayer = vectorLayers.get(vectorIndex);
+                    
+                    System.out.println("========== OPTIONAL LAYER DETAILS ==========");
+                    System.out.println("name = " + optionalLayer.getName());
+                    System.out.println("server = " + optionalLayer.getServer());
+                    System.out.println("multipleDates = " + optionalLayer.isMultipleDates());
+                    System.out.println("layerDetails = " + optionalLayer.getLayerDetails());
+                    System.out.println("============================================");
+
+                    System.out.println(
+                        "OPTIONAL [" + vectorIndex + "] "
+                        + optionalLayer.getName()
+                        + " | multipleDates="
+                        + optionalLayer.isMultipleDates()
+                    );
+                    
+                    System.out.println(
+                        "OPTIONAL identity = "
+                        + System.identityHashCode(optionalLayer)
+                    );
+
+                    if (optionalLayer.isMultipleDates()) {
+
+                        temporalLayer = optionalLayer;
+
+                        temporalLayerOpenLayersIndex =
+                            layersManager.getLayerOpenLayerIndex(
+                                optionalLayer.getName()
+                            );
+
+                        System.out.println(
+                            "### CAPA TEMPORAL OPTIONAL ENCONTRADA"
+                        );
+
+                        System.out.println(
+                            "### name = ["
+                            + optionalLayer.getName()
+                            + "]"
+                        );
+
+                        System.out.println(
+                            "### vectorIndex = "
+                            + vectorIndex
+                        );
+
+                        System.out.println(
+                            "### OpenLayers index = "
+                            + temporalLayerOpenLayersIndex
+                        );
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        System.out.println(
+            "### temporalLayer = " + temporalLayer
+        );
+
+        System.out.println(
+            "### temporalLayerOpenLayersIndex = "
+            + temporalLayerOpenLayersIndex
+        );
+
+        System.out.println(
+            "======================================================"
+        );
 
         if (currentLayer != null) {
+                                 
             System.out.println("OWGIS TIME DEBUG - class: "
                     + currentLayer.getClass().getName());
 

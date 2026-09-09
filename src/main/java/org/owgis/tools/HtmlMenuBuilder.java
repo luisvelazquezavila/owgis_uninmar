@@ -315,6 +315,11 @@ public class HtmlMenuBuilder {
 		if (selected) {
 			finalHtml += " checked";
 		}
+                
+                System.out.println("OPTIONAL CHECKBOX -> layerNum: " + layerNum
+                    + " | currMenuStr: [" + currMenuStr + "]"
+                    + " | selected: " + selected);
+                
 		finalHtml += ">\n";
 		return finalHtml;
 	}

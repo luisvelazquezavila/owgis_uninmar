@@ -485,9 +485,30 @@ public class MapViewerServlet extends HttpServlet {
 			//Obtains the selection of the vector layers of the user.
 
 			String[] selectedVectorLayers = UserRequestManager.manageVectorLayersOptions(request, session);
+                        System.out.println("========== OPTIONAL LAYER DEBUG ==========");
+                        System.out.println("selectedVectorLayers: " + java.util.Arrays.toString(selectedVectorLayers));
+                        
 			int[] vectorLayers = opManager.obtainIndexForOptionalLayers(selectedVectorLayers);
+                        
+                        System.out.println("========== OPTIONAL INDEX DEBUG ==========");
+                        System.out.println("selectedVectorLayers = "
+                                + java.util.Arrays.toString(selectedVectorLayers));
+                        System.out.println("vectorLayers = "
+                                + java.util.Arrays.toString(vectorLayers));
+                        System.out.println("==========================================");
+                        
+                        System.out.println("vectorLayers: " + java.util.Arrays.toString(vectorLayers));
+                        System.out.println("==========================================");
 
 			//openlayers configuration of javascript.
+                        
+                        System.out.println("========== CREATE CONFIG INPUT ==========");
+                        System.out.println("baseLayers = " + java.util.Arrays.toString(baseLayers));
+                        System.out.println("vectorLayers = " + java.util.Arrays.toString(vectorLayers));
+                        System.out.println("language = " + language);
+                        System.out.println("backgroundLayer = " + backgroundLayer);
+                        System.out.println("=========================================");
+                        
 			String openLayerConfig = opManager.createOpenLayConfig(baseLayers, vectorLayers, language, backgroundLayer);
 
 			//This is for the configuration of the page, this are read by the javascript throuhg jsp.

@@ -1402,6 +1402,8 @@ private void createMenuFromXMLfiles() throws XMLFilesException {
             "layer.multipleDates = "
             + layer.isMultipleDates()
         );
+        
+        System.out.println("layer.maxTimeLayer = [" + layer.getMaxTimeLayer() + "]");
 
         System.out.println("========================================");
         

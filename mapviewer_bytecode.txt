@@ -1,0 +1,1417 @@
+Compiled from "MapViewerServlet.java"
+public class org.owgis.business.servlets.MapViewerServlet extends javax.servlet.http.HttpServlet {
+  org.owgis.business.OpenLayersManager opManager;
+
+  org.owgis.conf.OpenLayerMapConfig mapConfig;
+
+  org.owgis.business.NetCDFRequestManager ncManager;
+
+  java.lang.String[] linksVectorialesKmz;
+
+  java.lang.String configFilePath;
+
+  java.lang.Boolean exceptionInitializingVariables;
+
+  public org.owgis.business.servlets.MapViewerServlet();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method javax/servlet/http/HttpServlet."<init>":()V
+       4: aload_0
+       5: iconst_0
+       6: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+       9: putfield      #13                 // Field exceptionInitializingVariables:Ljava/lang/Boolean;
+      12: return
+
+  private void initializeVariables() throws java.io.FileNotFoundException, org.owgis.exceptions.XMLFilesException, org.owgis.exceptions.XMLLayerException;
+    Code:
+       0: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+       3: invokevirtual #25                 // Method java/io/PrintStream.println:()V
+       6: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+       9: ldc           #30                 // String !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      11: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      14: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      17: ldc           #35                 // String ### ENTRE A initializeVariables()
+      19: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      22: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      25: ldc           #30                 // String !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      27: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      30: aload_0
+      31: invokestatic  #37                 // Method org/owgis/conf/OpenLayerMapConfig.getInstance:()Lorg/owgis/conf/OpenLayerMapConfig;
+      34: putfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+      37: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      40: ldc           #47                 // String ### PASO 1: OpenLayerMapConfig obtenido
+      42: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      45: aload_0
+      46: aload_0
+      47: invokevirtual #49                 // Method getServletContext:()Ljavax/servlet/ServletContext;
+      50: ldc           #53                 // String /WEB-INF/conf/MapViewConfig.properties
+      52: invokeinterface #55,  2           // InterfaceMethod javax/servlet/ServletContext.getRealPath:(Ljava/lang/String;)Ljava/lang/String;
+      57: putfield      #61                 // Field configFilePath:Ljava/lang/String;
+      60: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      63: new           #65                 // class java/lang/StringBuilder
+      66: dup
+      67: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+      70: ldc           #68                 // String ### PASO 2: configFilePath =
+      72: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      75: aload_0
+      76: getfield      #61                 // Field configFilePath:Ljava/lang/String;
+      79: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      82: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+      85: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      88: aload_0
+      89: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+      92: aload_0
+      93: getfield      #61                 // Field configFilePath:Ljava/lang/String;
+      96: invokevirtual #78                 // Method org/owgis/conf/OpenLayerMapConfig.updateProperties:(Ljava/lang/String;)V
+      99: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     102: ldc           #81                 // String ### PASO 3: updateProperties OK
+     104: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     107: aload_0
+     108: invokevirtual #49                 // Method getServletContext:()Ljavax/servlet/ServletContext;
+     111: ldc           #83                 // String /layers/
+     113: invokeinterface #55,  2           // InterfaceMethod javax/servlet/ServletContext.getRealPath:(Ljava/lang/String;)Ljava/lang/String;
+     118: astore_1
+     119: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     122: new           #65                 // class java/lang/StringBuilder
+     125: dup
+     126: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     129: ldc           #85                 // String ### PASO 4: layersFolder =
+     131: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     134: aload_1
+     135: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     138: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     141: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     144: aload_0
+     145: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+     148: ldc           #87                 // String baseLayerMenuOrientation
+     150: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+     153: astore_2
+     154: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     157: new           #65                 // class java/lang/StringBuilder
+     160: dup
+     161: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     164: ldc           #92                 // String ### PASO 5: baseLayerMenuOrientation =
+     166: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     169: aload_2
+     170: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     173: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     176: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     179: aload_2
+     180: putstatic     #94                 // Field org/owgis/tools/HtmlMenuBuilder.baseLayerMenuOrientation:Ljava/lang/String;
+     183: aload_1
+     184: invokestatic  #98                 // Method org/owgis/business/LayerMenuManagerSingleton.setLayersFolder:(Ljava/lang/String;)V
+     187: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     190: ldc           #103                // String ### PASO 6: setLayersFolder OK
+     192: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     195: aload_0
+     196: new           #105                // class org/owgis/business/OpenLayersManager
+     199: dup
+     200: invokespecial #107                // Method org/owgis/business/OpenLayersManager."<init>":()V
+     203: putfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     206: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     209: ldc           #112                // String ### PASO 7: OpenLayersManager OK
+     211: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     214: aload_0
+     215: new           #114                // class org/owgis/business/NetCDFRequestManager
+     218: dup
+     219: invokespecial #116                // Method org/owgis/business/NetCDFRequestManager."<init>":()V
+     222: putfield      #117                // Field ncManager:Lorg/owgis/business/NetCDFRequestManager;
+     225: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     228: ldc           #121                // String ### PASO 8: NetCDFRequestManager OK
+     230: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     233: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     236: invokevirtual #25                 // Method java/io/PrintStream.println:()V
+     239: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     242: ldc           #123                // String ########################################################
+     244: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     247: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     250: ldc           #125                // String ### MAPVIEWER: INICIANDO CARGA INICIAL DE LAYERS
+     252: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     255: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     258: ldc           #127                // String ### Voy a llamar getInstance().refreshTree(true)
+     260: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     263: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     266: ldc           #123                // String ########################################################
+     268: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     271: new           #129                // class java/lang/Exception
+     274: dup
+     275: ldc           #131                // String STACK TRACE: MAPVIEWER refreshTree(true)
+     277: invokespecial #133                // Method java/lang/Exception."<init>":(Ljava/lang/String;)V
+     280: invokevirtual #135                // Method java/lang/Exception.printStackTrace:()V
+     283: invokestatic  #138                // Method org/owgis/business/LayerMenuManagerSingleton.getInstance:()Lorg/owgis/business/LayerMenuManagerSingleton;
+     286: iconst_1
+     287: invokevirtual #141                // Method org/owgis/business/LayerMenuManagerSingleton.refreshTree:(Z)Z
+     290: pop
+     291: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     294: invokevirtual #25                 // Method java/io/PrintStream.println:()V
+     297: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     300: ldc           #123                // String ########################################################
+     302: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     305: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     308: ldc           #145                // String ### MAPVIEWER: REGRESO DE refreshTree(true)
+     310: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     313: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     316: ldc           #123                // String ########################################################
+     318: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     321: return
+
+  public void init() throws javax.servlet.ServletException;
+    Code:
+       0: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+       3: ldc           #147                // String ################################################
+       5: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       8: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      11: ldc           #149                // String ### MAPVIEWERSERVLET INIT - PRUEBA 31-08-2026 ###
+      13: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      16: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      19: new           #65                 // class java/lang/StringBuilder
+      22: dup
+      23: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+      26: ldc           #151                // String ### CODE SOURCE =
+      28: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      31: ldc           #14                 // class org/owgis/business/servlets/MapViewerServlet
+      33: invokevirtual #153                // Method java/lang/Class.getProtectionDomain:()Ljava/security/ProtectionDomain;
+      36: invokevirtual #159                // Method java/security/ProtectionDomain.getCodeSource:()Ljava/security/CodeSource;
+      39: invokevirtual #165                // Method java/security/CodeSource.getLocation:()Ljava/net/URL;
+      42: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      45: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+      48: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      51: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      54: ldc           #147                // String ################################################
+      56: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      59: new           #174                // class java/io/FileWriter
+      62: dup
+      63: ldc           #176                // String C:\apache-tomcat-9\mapviewer_init_test.txt
+      65: iconst_1
+      66: invokespecial #178                // Method java/io/FileWriter."<init>":(Ljava/lang/String;Z)V
+      69: astore_1
+      70: aload_1
+      71: new           #65                 // class java/lang/StringBuilder
+      74: dup
+      75: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+      78: ldc           #181                // String MAPVIEWER INIT EJECUTADO -
+      80: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      83: new           #183                // class java/util/Date
+      86: dup
+      87: invokespecial #185                // Method java/util/Date."<init>":()V
+      90: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      93: ldc           #186                // String \r\n
+      95: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      98: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     101: invokevirtual #188                // Method java/io/FileWriter.write:(Ljava/lang/String;)V
+     104: aload_1
+     105: invokevirtual #191                // Method java/io/FileWriter.close:()V
+     108: goto          116
+     111: astore_1
+     112: aload_1
+     113: invokevirtual #135                // Method java/lang/Exception.printStackTrace:()V
+     116: getstatic     #194                // Field java/lang/System.err:Ljava/io/PrintStream;
+     119: ldc           #197                // String ########### PRUEBA MAPVIEWER INIT ###########
+     121: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     124: getstatic     #194                // Field java/lang/System.err:Ljava/io/PrintStream;
+     127: invokevirtual #199                // Method java/io/PrintStream.flush:()V
+     130: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     133: ldc           #197                // String ########### PRUEBA MAPVIEWER INIT ###########
+     135: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     138: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     141: invokevirtual #199                // Method java/io/PrintStream.flush:()V
+     144: getstatic     #194                // Field java/lang/System.err:Ljava/io/PrintStream;
+     147: ldc           #202                // String ###### MAPVIEWER INIT SYSTEM ERR ########
+     149: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     152: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     155: invokevirtual #25                 // Method java/io/PrintStream.println:()V
+     158: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     161: ldc           #147                // String ################################################
+     163: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     166: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     169: ldc           #204                // String ### MAPVIEWER INIT() EJECUTADO
+     171: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     174: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     177: ldc           #206                // String ### SERVLET = MapViewerServlet
+     179: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     182: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     185: new           #65                 // class java/lang/StringBuilder
+     188: dup
+     189: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     192: ldc           #208                // String ### CONTEXT =
+     194: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     197: aload_0
+     198: invokevirtual #49                 // Method getServletContext:()Ljavax/servlet/ServletContext;
+     201: invokeinterface #210,  1          // InterfaceMethod javax/servlet/ServletContext.getContextPath:()Ljava/lang/String;
+     206: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     209: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     212: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     215: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     218: ldc           #147                // String ################################################
+     220: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     223: aload_0
+     224: invokespecial #213                // Method initializeVariables:()V
+     227: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     230: ldc           #216                // String ### MAPVIEWER initializeVariables() TERMINO
+     232: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     235: goto          291
+     238: astore_1
+     239: aload_0
+     240: iconst_1
+     241: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+     244: putfield      #13                 // Field exceptionInitializingVariables:Ljava/lang/Boolean;
+     247: aload_1
+     248: invokevirtual #220                // Method org/owgis/exceptions/XMLFilesException.printStackTrace:()V
+     251: ldc           #14                 // class org/owgis/business/servlets/MapViewerServlet
+     253: invokevirtual #221                // Method java/lang/Class.getName:()Ljava/lang/String;
+     256: invokestatic  #224                // Method java/util/logging/Logger.getLogger:(Ljava/lang/String;)Ljava/util/logging/Logger;
+     259: getstatic     #230                // Field java/util/logging/Level.SEVERE:Ljava/util/logging/Level;
+     262: aconst_null
+     263: aload_1
+     264: invokevirtual #236                // Method java/util/logging/Logger.log:(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V
+     267: goto          291
+     270: astore_1
+     271: aload_1
+     272: invokevirtual #242                // Method java/io/FileNotFoundException.printStackTrace:()V
+     275: ldc           #14                 // class org/owgis/business/servlets/MapViewerServlet
+     277: invokevirtual #221                // Method java/lang/Class.getName:()Ljava/lang/String;
+     280: invokestatic  #224                // Method java/util/logging/Logger.getLogger:(Ljava/lang/String;)Ljava/util/logging/Logger;
+     283: getstatic     #230                // Field java/util/logging/Level.SEVERE:Ljava/util/logging/Level;
+     286: aconst_null
+     287: aload_1
+     288: invokevirtual #236                // Method java/util/logging/Logger.log:(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V
+     291: aload_0
+     292: invokespecial #243                // Method javax/servlet/http/HttpServlet.init:()V
+     295: return
+    Exception table:
+       from    to  target type
+          59   108   111   Class java/lang/Exception
+         223   235   238   Class org/owgis/exceptions/XMLFilesException
+         223   235   270   Class java/io/FileNotFoundException
+
+  protected void processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) throws javax.servlet.ServletException, java.io.IOException;
+    Code:
+       0: getstatic     #246                // Field org/owgis/model/PagesNames.ERROR_PAGE:Ljava/lang/String;
+       3: astore_3
+       4: aload_0
+       5: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+       8: aload_0
+       9: getfield      #61                 // Field configFilePath:Ljava/lang/String;
+      12: invokevirtual #78                 // Method org/owgis/conf/OpenLayerMapConfig.updateProperties:(Ljava/lang/String;)V
+      15: aload_2
+      16: ldc           #251                // String text/html;charset=iso-8859-1
+      18: invokeinterface #253,  2          // InterfaceMethod javax/servlet/http/HttpServletResponse.setContentType:(Ljava/lang/String;)V
+      23: aload_1
+      24: invokeinterface #258,  1          // InterfaceMethod javax/servlet/http/HttpServletRequest.getSession:()Ljavax/servlet/http/HttpSession;
+      29: astore        4
+      31: aconst_null
+      32: astore        5
+      34: aload_0
+      35: getfield      #13                 // Field exceptionInitializingVariables:Ljava/lang/Boolean;
+      38: invokevirtual #264                // Method java/lang/Boolean.booleanValue:()Z
+      41: ifeq          48
+      44: aload_0
+      45: invokespecial #213                // Method initializeVariables:()V
+      48: aload_1
+      49: aload         4
+      51: invokestatic  #268                // Method org/owgis/business/UserRequestManager.createNewRootMenu:(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpSession;)Lorg/owgis/model/menu/TreeNode;
+      54: astore        5
+      56: aload_0
+      57: iconst_0
+      58: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      61: putfield      #13                 // Field exceptionInitializingVariables:Ljava/lang/Boolean;
+      64: goto          224
+      67: astore        6
+      69: aload_1
+      70: aload         4
+      72: invokestatic  #268                // Method org/owgis/business/UserRequestManager.createNewRootMenu:(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpSession;)Lorg/owgis/model/menu/TreeNode;
+      75: astore        5
+      77: aload         4
+      79: ldc_w         #274                // String MenuDelUsuario
+      82: aload         5
+      84: invokeinterface #276,  3          // InterfaceMethod javax/servlet/http/HttpSession.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+      89: new           #282                // class java/io/StringWriter
+      92: dup
+      93: invokespecial #284                // Method java/io/StringWriter."<init>":()V
+      96: astore        7
+      98: aload         6
+     100: new           #285                // class java/io/PrintWriter
+     103: dup
+     104: aload         7
+     106: invokespecial #287                // Method java/io/PrintWriter."<init>":(Ljava/io/Writer;)V
+     109: invokevirtual #290                // Method org/owgis/exceptions/XMLFilesException.printStackTrace:(Ljava/io/PrintWriter;)V
+     112: aload         6
+     114: invokevirtual #293                // Method org/owgis/exceptions/XMLFilesException.getMessage:()Ljava/lang/String;
+     117: astore        8
+     119: aload         7
+     121: invokevirtual #296                // Method java/io/StringWriter.toString:()Ljava/lang/String;
+     124: astore        9
+     126: aload         9
+     128: iconst_0
+     129: aload         9
+     131: ldc_w         #297                // String \n
+     134: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+     137: invokevirtual #305                // Method java/lang/String.substring:(II)Ljava/lang/String;
+     140: astore        9
+     142: aload         9
+     144: ldc_w         #309                // String \"
+     147: ldc_w         #311                // String
+     150: invokevirtual #313                // Method java/lang/String.replace:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+     153: astore        9
+     155: aload         9
+     157: ldc_w         #317                // String '
+     160: ldc_w         #311                // String
+     163: invokevirtual #313                // Method java/lang/String.replace:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+     166: astore        9
+     168: aload         8
+     170: ldc_w         #309                // String \"
+     173: ldc_w         #311                // String
+     176: invokevirtual #313                // Method java/lang/String.replace:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+     179: astore        8
+     181: aload         8
+     183: ldc_w         #317                // String '
+     186: ldc_w         #311                // String
+     189: invokevirtual #313                // Method java/lang/String.replace:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+     192: astore        8
+     194: aload_1
+     195: ldc_w         #319                // String warningText
+     198: aload         8
+     200: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+     205: aload_1
+     206: ldc_w         #322                // String warningInfo
+     209: aload         9
+     211: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+     216: aload_0
+     217: iconst_1
+     218: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+     221: putfield      #13                 // Field exceptionInitializingVariables:Ljava/lang/Boolean;
+     224: aload_0
+     225: getfield      #324                // Field linksVectorialesKmz:[Ljava/lang/String;
+     228: ifnonnull     252
+     231: aload_0
+     232: aload_0
+     233: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     236: invokevirtual #328                // Method org/owgis/business/OpenLayersManager.getVectorLayers:()Ljava/util/ArrayList;
+     239: invokestatic  #332                // Method org/owgis/business/UserRequestManager.getCheckboxKmlLinks:(Ljava/util/ArrayList;)[Ljava/lang/String;
+     242: putfield      #324                // Field linksVectorialesKmz:[Ljava/lang/String;
+     245: aload_0
+     246: getfield      #324                // Field linksVectorialesKmz:[Ljava/lang/String;
+     249: putstatic     #336                // Field org/owgis/tools/HtmlMenuBuilder.vecLinks:[Ljava/lang/String;
+     252: aload         5
+     254: invokestatic  #339                // Method org/owgis/model/menu/TreeMenuUtils.obtieneMenuSeleccionado:(Lorg/owgis/model/menu/TreeNode;)[Lorg/owgis/model/menu/MenuEntry;
+     257: astore        6
+     259: aload_0
+     260: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     263: aload         6
+     265: invokevirtual #345                // Method org/owgis/business/OpenLayersManager.obtainArrayIndexOfLayers:([Lorg/owgis/model/menu/MenuEntry;)[I
+     268: astore        7
+     270: aconst_null
+     271: astore        8
+     273: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     276: ldc_w         #349                // String ========== CLASS LOCATION DEBUG ==========
+     279: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     282: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     285: ldc           #99                 // class org/owgis/business/LayerMenuManagerSingleton
+     287: invokevirtual #153                // Method java/lang/Class.getProtectionDomain:()Ljava/security/ProtectionDomain;
+     290: invokevirtual #159                // Method java/security/ProtectionDomain.getCodeSource:()Ljava/security/CodeSource;
+     293: invokevirtual #165                // Method java/security/CodeSource.getLocation:()Ljava/net/URL;
+     296: invokevirtual #351                // Method java/io/PrintStream.println:(Ljava/lang/Object;)V
+     299: aload_1
+     300: ldc_w         #354                // String cqlfilter
+     303: iconst_0
+     304: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+     307: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+     312: aload         7
+     314: ifnull        1443
+     317: aload_0
+     318: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     321: invokevirtual #356                // Method org/owgis/business/OpenLayersManager.getRasterLayers:()Ljava/util/ArrayList;
+     324: aload         7
+     326: iconst_0
+     327: iaload
+     328: invokevirtual #359                // Method java/util/ArrayList.get:(I)Ljava/lang/Object;
+     331: checkcast     #365                // class org/owgis/model/Layer
+     334: astore        8
+     336: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     339: ldc_w         #367                // String ========== MAPVIEWER MAINLAYERS ==========
+     342: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     345: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     348: new           #65                 // class java/lang/StringBuilder
+     351: dup
+     352: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     355: ldc_w         #369                // String mainLayers size =
+     358: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     361: aload_0
+     362: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     365: invokevirtual #356                // Method org/owgis/business/OpenLayersManager.getRasterLayers:()Ljava/util/ArrayList;
+     368: invokevirtual #371                // Method java/util/ArrayList.size:()I
+     371: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     374: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     377: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     380: iconst_0
+     381: istore        9
+     383: iload         9
+     385: aload_0
+     386: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     389: invokevirtual #356                // Method org/owgis/business/OpenLayersManager.getRasterLayers:()Ljava/util/ArrayList;
+     392: invokevirtual #371                // Method java/util/ArrayList.size:()I
+     395: if_icmpge     490
+     398: aload_0
+     399: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+     402: invokevirtual #356                // Method org/owgis/business/OpenLayersManager.getRasterLayers:()Ljava/util/ArrayList;
+     405: iload         9
+     407: invokevirtual #359                // Method java/util/ArrayList.get:(I)Ljava/lang/Object;
+     410: checkcast     #365                // class org/owgis/model/Layer
+     413: astore        10
+     415: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     418: new           #65                 // class java/lang/StringBuilder
+     421: dup
+     422: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     425: ldc_w         #378                // String mainLayers[
+     428: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     431: iload         9
+     433: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     436: ldc_w         #380                // String ] name=
+     439: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     442: aload         10
+     444: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+     447: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     450: ldc_w         #383                // String  identity=
+     453: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     456: aload         10
+     458: invokestatic  #385                // Method java/lang/System.identityHashCode:(Ljava/lang/Object;)I
+     461: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     464: ldc_w         #389                // String  multipleDates=
+     467: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     470: aload         10
+     472: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+     475: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+     478: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     481: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     484: iinc          9, 1
+     487: goto          383
+     490: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     493: ldc_w         #397                // String ========== CURR MAIN LAYER ==========
+     496: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     499: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     502: new           #65                 // class java/lang/StringBuilder
+     505: dup
+     506: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     509: ldc_w         #399                // String baseLayers[0] =
+     512: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     515: aload         7
+     517: iconst_0
+     518: iaload
+     519: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     522: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     525: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     528: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     531: new           #65                 // class java/lang/StringBuilder
+     534: dup
+     535: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     538: ldc_w         #401                // String curr_main_layer =
+     541: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     544: aload         8
+     546: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+     549: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     552: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     555: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     558: new           #65                 // class java/lang/StringBuilder
+     561: dup
+     562: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     565: ldc_w         #403                // String curr_main_layer.name =
+     568: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     571: aload         8
+     573: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+     576: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     579: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     582: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     585: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     588: new           #65                 // class java/lang/StringBuilder
+     591: dup
+     592: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     595: ldc_w         #405                // String curr_main_layer.identity =
+     598: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     601: aload         8
+     603: invokestatic  #385                // Method java/lang/System.identityHashCode:(Ljava/lang/Object;)I
+     606: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     609: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     612: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     615: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     618: new           #65                 // class java/lang/StringBuilder
+     621: dup
+     622: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     625: ldc_w         #407                // String curr_main_layer.multipleDates =
+     628: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     631: aload         8
+     633: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+     636: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+     639: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     642: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     645: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     648: ldc_w         #409                // String ======================================
+     651: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     654: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     657: ldc_w         #411                // String ========== MAPVIEWER INSTANCE FINAL ==========
+     660: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     663: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     666: new           #65                 // class java/lang/StringBuilder
+     669: dup
+     670: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     673: ldc_w         #413                // String Layer:
+     676: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     679: aload         8
+     681: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+     684: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     687: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     690: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     693: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     696: new           #65                 // class java/lang/StringBuilder
+     699: dup
+     700: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     703: ldc_w         #415                // String identityHashCode:
+     706: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     709: aload         8
+     711: invokestatic  #385                // Method java/lang/System.identityHashCode:(Ljava/lang/Object;)I
+     714: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     717: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     720: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     723: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     726: new           #65                 // class java/lang/StringBuilder
+     729: dup
+     730: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     733: ldc_w         #417                // String multipleDates:
+     736: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     739: aload         8
+     741: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+     744: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+     747: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     750: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     753: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     756: ldc_w         #419                // String ==============================================
+     759: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     762: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     765: ldc_w         #421                // String ========== MAPVIEWER INMEDIATO ==========
+     768: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     771: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     774: new           #65                 // class java/lang/StringBuilder
+     777: dup
+     778: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     781: ldc_w         #413                // String Layer:
+     784: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     787: aload         8
+     789: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+     792: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     795: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     798: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     801: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     804: new           #65                 // class java/lang/StringBuilder
+     807: dup
+     808: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     811: ldc_w         #415                // String identityHashCode:
+     814: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     817: aload         8
+     819: invokestatic  #385                // Method java/lang/System.identityHashCode:(Ljava/lang/Object;)I
+     822: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     825: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     828: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     831: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     834: new           #65                 // class java/lang/StringBuilder
+     837: dup
+     838: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     841: ldc_w         #423                // String multipleDates INMEDIATO =
+     844: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     847: aload         8
+     849: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+     852: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+     855: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     858: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     861: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     864: ldc_w         #425                // String ==========================================
+     867: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     870: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     873: ldc_w         #427                // String ========== MAPVIEWER LAYER INSTANCE ==========
+     876: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     879: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     882: new           #65                 // class java/lang/StringBuilder
+     885: dup
+     886: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     889: ldc_w         #401                // String curr_main_layer =
+     892: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     895: aload         8
+     897: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+     900: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     903: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     906: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     909: new           #65                 // class java/lang/StringBuilder
+     912: dup
+     913: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     916: ldc_w         #429                // String identityHashCode =
+     919: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     922: aload         8
+     924: invokestatic  #385                // Method java/lang/System.identityHashCode:(Ljava/lang/Object;)I
+     927: invokevirtual #375                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+     930: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     933: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     936: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     939: new           #65                 // class java/lang/StringBuilder
+     942: dup
+     943: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     946: ldc_w         #431                // String name =
+     949: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     952: aload         8
+     954: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+     957: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     960: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     963: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     966: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     969: new           #65                 // class java/lang/StringBuilder
+     972: dup
+     973: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+     976: ldc_w         #433                // String multipleDates =
+     979: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     982: aload         8
+     984: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+     987: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+     990: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     993: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     996: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     999: new           #65                 // class java/lang/StringBuilder
+    1002: dup
+    1003: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1006: ldc_w         #435                // String layerDetails =
+    1009: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1012: aload         8
+    1014: invokevirtual #437                // Method org/owgis/model/Layer.getLayerDetails:()Ljava/lang/String;
+    1017: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1020: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1023: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1026: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1029: ldc_w         #419                // String ==============================================
+    1032: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1035: aload_1
+    1036: ldc_w         #440                // String ncwms
+    1039: aload         8
+    1041: invokevirtual #442                // Method org/owgis/model/Layer.isncWMS:()Z
+    1044: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1047: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1052: aload_1
+    1053: ldc_w         #445                // String currents
+    1056: aload         8
+    1058: invokevirtual #447                // Method org/owgis/model/Layer.isoverlayStreamlines:()Z
+    1061: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1064: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1069: aload_1
+    1070: ldc_w         #450                // String layerDetails
+    1073: aload         8
+    1075: invokevirtual #437                // Method org/owgis/model/Layer.getLayerDetails:()Ljava/lang/String;
+    1078: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1083: aload_1
+    1084: ldc_w         #452                // String zaxis
+    1087: aload         8
+    1089: invokevirtual #454                // Method org/owgis/model/Layer.isZaxis:()Z
+    1092: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1095: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1100: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1103: ldc_w         #457                // String ========== MAPVIEWER MULTIPLE DATES ==========
+    1106: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1109: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1112: new           #65                 // class java/lang/StringBuilder
+    1115: dup
+    1116: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1119: ldc_w         #401                // String curr_main_layer =
+    1122: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1125: aload         8
+    1127: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    1130: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1133: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1136: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1139: new           #65                 // class java/lang/StringBuilder
+    1142: dup
+    1143: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1146: ldc_w         #403                // String curr_main_layer.name =
+    1149: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1152: aload         8
+    1154: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+    1157: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1160: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1163: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1166: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1169: new           #65                 // class java/lang/StringBuilder
+    1172: dup
+    1173: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1176: ldc_w         #459                // String curr_main_layer.isMultipleDates() =
+    1179: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1182: aload         8
+    1184: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+    1187: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+    1190: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1193: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1196: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1199: ldc_w         #461                // String ========== MAPVIEWER TIME TEST ==========
+    1202: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1205: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1208: new           #65                 // class java/lang/StringBuilder
+    1211: dup
+    1212: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1215: ldc_w         #401                // String curr_main_layer =
+    1218: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1221: aload         8
+    1223: invokevirtual #171                // Method java/lang/StringBuilder.append:(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    1226: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1229: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1232: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1235: new           #65                 // class java/lang/StringBuilder
+    1238: dup
+    1239: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1242: ldc_w         #403                // String curr_main_layer.name =
+    1245: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1248: aload         8
+    1250: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+    1253: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1256: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1259: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1262: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1265: new           #65                 // class java/lang/StringBuilder
+    1268: dup
+    1269: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1272: ldc_w         #459                // String curr_main_layer.isMultipleDates() =
+    1275: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1278: aload         8
+    1280: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+    1283: invokevirtual #394                // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+    1286: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1289: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1292: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1295: new           #65                 // class java/lang/StringBuilder
+    1298: dup
+    1299: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1302: ldc_w         #463                // String curr_main_layer.getLayerDetails() =
+    1305: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1308: aload         8
+    1310: invokevirtual #437                // Method org/owgis/model/Layer.getLayerDetails:()Ljava/lang/String;
+    1313: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1316: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1319: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1322: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1325: ldc_w         #465                // String =========================================
+    1328: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1331: aload_1
+    1332: ldc_w         #467                // String multipleDates
+    1335: aload         8
+    1337: invokevirtual #391                // Method org/owgis/model/Layer.isMultipleDates:()Z
+    1340: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1343: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1348: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1351: ldc_w         #469                // String ===============================================
+    1354: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1357: aload_1
+    1358: ldc_w         #471                // String mainLayer
+    1361: aload         8
+    1363: invokevirtual #382                // Method org/owgis/model/Layer.getName:()Ljava/lang/String;
+    1366: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1371: aload_1
+    1372: ldc_w         #473                // String style
+    1375: aload         8
+    1377: invokevirtual #475                // Method org/owgis/model/Layer.getStyle:()Ljava/lang/String;
+    1380: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1385: aload_1
+    1386: ldc_w         #478                // String max_time_range
+    1389: aload         8
+    1391: invokevirtual #480                // Method org/owgis/model/Layer.getMaxTimeLayer:()Ljava/lang/String;
+    1394: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1399: aload_1
+    1400: ldc_w         #483                // String cqlcols
+    1403: aload         8
+    1405: invokevirtual #485                // Method org/owgis/model/Layer.getCql_cols:()Ljava/lang/String;
+    1408: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1413: aload         8
+    1415: invokevirtual #485                // Method org/owgis/model/Layer.getCql_cols:()Ljava/lang/String;
+    1418: ldc_w         #311                // String
+    1421: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    1424: ifne          1540
+    1427: aload_1
+    1428: ldc_w         #354                // String cqlfilter
+    1431: iconst_1
+    1432: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1435: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1440: goto          1540
+    1443: aload_1
+    1444: ldc_w         #440                // String ncwms
+    1447: iconst_0
+    1448: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    1451: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1456: aload_1
+    1457: ldc_w         #445                // String currents
+    1460: aconst_null
+    1461: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1466: aload_1
+    1467: ldc_w         #450                // String layerDetails
+    1470: ldc_w         #492                // String {}
+    1473: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1478: aload_1
+    1479: ldc_w         #452                // String zaxis
+    1482: aconst_null
+    1483: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1488: aload_1
+    1489: ldc_w         #467                // String multipleDates
+    1492: ldc_w         #494                // String null
+    1495: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1500: aload_1
+    1501: ldc_w         #471                // String mainLayer
+    1504: aconst_null
+    1505: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1510: aload_1
+    1511: ldc_w         #473                // String style
+    1514: aconst_null
+    1515: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1520: aload_1
+    1521: ldc_w         #478                // String max_time_range
+    1524: aconst_null
+    1525: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1530: aload_1
+    1531: ldc_w         #483                // String cqlcols
+    1534: aconst_null
+    1535: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1540: aload_0
+    1541: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1544: ldc_w         #496                // String defaultLanguage
+    1547: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1550: astore        9
+    1552: aload_0
+    1553: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1556: ldc_w         #498                // String availableLanguages
+    1559: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1562: astore        10
+    1564: aload_0
+    1565: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1568: ldc_w         #500                // String imageResolution
+    1571: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1574: invokestatic  #502                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+    1577: istore        11
+    1579: aload_1
+    1580: ldc_w         #500                // String imageResolution
+    1583: iload         11
+    1585: invokestatic  #507                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    1588: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1593: aload_1
+    1594: ldc_w         #496                // String defaultLanguage
+    1597: aload         9
+    1599: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1604: aload_1
+    1605: ldc_w         #498                // String availableLanguages
+    1608: aload         10
+    1610: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1615: aload_1
+    1616: ldc_w         #510                // String _locale
+    1619: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    1624: astore        12
+    1626: aload         12
+    1628: ifnull        1642
+    1631: ldc_w         #311                // String
+    1634: aload         12
+    1636: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    1639: ifeq          1646
+    1642: aload         9
+    1644: astore        12
+    1646: aload_0
+    1647: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1650: ldc_w         #515                // String backgroundLayer
+    1653: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1656: astore        13
+    1658: aload_1
+    1659: ldc_w         #515                // String backgroundLayer
+    1662: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    1667: astore        14
+    1669: aload         14
+    1671: ifnull        1685
+    1674: ldc_w         #311                // String
+    1677: aload         14
+    1679: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    1682: ifeq          1690
+    1685: aload         13
+    1687: goto          1692
+    1690: aload         14
+    1692: astore        14
+    1694: aload         14
+    1696: aload         13
+    1698: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    1701: ifne          1791
+    1704: aload_0
+    1705: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1708: ldc_w         #517                // String availableMaxResolution
+    1711: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1714: ldc_w         #519                // String ;
+    1717: invokevirtual #521                // Method java/lang/String.split:(Ljava/lang/String;)[Ljava/lang/String;
+    1720: astore        15
+    1722: aload_0
+    1723: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1726: ldc_w         #525                // String availableBackgroundLayers
+    1729: invokevirtual #89                 // Method org/owgis/conf/OpenLayerMapConfig.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+    1732: ldc_w         #519                // String ;
+    1735: invokevirtual #521                // Method java/lang/String.split:(Ljava/lang/String;)[Ljava/lang/String;
+    1738: astore        16
+    1740: iconst_0
+    1741: istore        17
+    1743: iload         17
+    1745: aload         15
+    1747: arraylength
+    1748: if_icmpge     1788
+    1751: aload         14
+    1753: aload         16
+    1755: iload         17
+    1757: aaload
+    1758: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    1761: ifeq          1782
+    1764: aload_0
+    1765: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1768: ldc_w         #527                // String maxResolution
+    1771: aload         15
+    1773: iload         17
+    1775: aaload
+    1776: invokevirtual #529                // Method org/owgis/conf/OpenLayerMapConfig.updateProperty:(Ljava/lang/String;Ljava/lang/String;)V
+    1779: goto          1788
+    1782: iinc          17, 1
+    1785: goto          1743
+    1788: goto          1827
+    1791: aload_0
+    1792: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1795: ldc_w         #527                // String maxResolution
+    1798: new           #65                 // class java/lang/StringBuilder
+    1801: dup
+    1802: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1805: aload_0
+    1806: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    1809: invokevirtual #533                // Method org/owgis/conf/OpenLayerMapConfig.getMaxResolution:()D
+    1812: invokevirtual #537                // Method java/lang/StringBuilder.append:(D)Ljava/lang/StringBuilder;
+    1815: ldc_w         #311                // String
+    1818: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1821: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1824: invokevirtual #529                // Method org/owgis/conf/OpenLayerMapConfig.updateProperty:(Ljava/lang/String;Ljava/lang/String;)V
+    1827: aload_1
+    1828: ldc_w         #515                // String backgroundLayer
+    1831: aload         14
+    1833: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    1838: aload_1
+    1839: aload         4
+    1841: invokestatic  #540                // Method org/owgis/business/UserRequestManager.manageVectorLayersOptions:(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpSession;)[Ljava/lang/String;
+    1844: astore        15
+    1846: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1849: ldc_w         #544                // String ========== OPTIONAL LAYER DEBUG ==========
+    1852: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1855: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1858: new           #65                 // class java/lang/StringBuilder
+    1861: dup
+    1862: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1865: ldc_w         #546                // String selectedVectorLayers:
+    1868: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1871: aload         15
+    1873: invokestatic  #548                // Method java/util/Arrays.toString:([Ljava/lang/Object;)Ljava/lang/String;
+    1876: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1879: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1882: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1885: aload_0
+    1886: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    1889: aload         15
+    1891: invokevirtual #553                // Method org/owgis/business/OpenLayersManager.obtainIndexForOptionalLayers:([Ljava/lang/String;)[I
+    1894: astore        16
+    1896: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1899: ldc_w         #557                // String ========== OPTIONAL INDEX DEBUG ==========
+    1902: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1905: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1908: new           #65                 // class java/lang/StringBuilder
+    1911: dup
+    1912: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1915: ldc_w         #559                // String selectedVectorLayers =
+    1918: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1921: aload         15
+    1923: invokestatic  #548                // Method java/util/Arrays.toString:([Ljava/lang/Object;)Ljava/lang/String;
+    1926: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1929: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1932: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1935: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1938: new           #65                 // class java/lang/StringBuilder
+    1941: dup
+    1942: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1945: ldc_w         #561                // String vectorLayers =
+    1948: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1951: aload         16
+    1953: invokestatic  #563                // Method java/util/Arrays.toString:([I)Ljava/lang/String;
+    1956: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1959: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    1962: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1965: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1968: ldc_w         #425                // String ==========================================
+    1971: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    1974: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    1977: new           #65                 // class java/lang/StringBuilder
+    1980: dup
+    1981: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    1984: ldc_w         #566                // String vectorLayers:
+    1987: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1990: aload         16
+    1992: invokestatic  #563                // Method java/util/Arrays.toString:([I)Ljava/lang/String;
+    1995: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    1998: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2001: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2004: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2007: ldc_w         #425                // String ==========================================
+    2010: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2013: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2016: ldc_w         #568                // String ========== CREATE CONFIG INPUT ==========
+    2019: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2022: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2025: new           #65                 // class java/lang/StringBuilder
+    2028: dup
+    2029: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2032: ldc_w         #570                // String baseLayers =
+    2035: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2038: aload         7
+    2040: invokestatic  #563                // Method java/util/Arrays.toString:([I)Ljava/lang/String;
+    2043: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2046: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2049: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2052: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2055: new           #65                 // class java/lang/StringBuilder
+    2058: dup
+    2059: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2062: ldc_w         #561                // String vectorLayers =
+    2065: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2068: aload         16
+    2070: invokestatic  #563                // Method java/util/Arrays.toString:([I)Ljava/lang/String;
+    2073: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2076: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2079: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2082: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2085: new           #65                 // class java/lang/StringBuilder
+    2088: dup
+    2089: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2092: ldc_w         #572                // String language =
+    2095: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2098: aload         12
+    2100: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2103: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2106: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2109: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2112: new           #65                 // class java/lang/StringBuilder
+    2115: dup
+    2116: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2119: ldc_w         #574                // String backgroundLayer =
+    2122: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2125: aload         14
+    2127: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2130: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2133: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2136: getstatic     #19                 // Field java/lang/System.out:Ljava/io/PrintStream;
+    2139: ldc_w         #465                // String =========================================
+    2142: invokevirtual #32                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+    2145: aload_0
+    2146: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2149: aload         7
+    2151: aload         16
+    2153: aload         12
+    2155: aload         14
+    2157: invokevirtual #576                // Method org/owgis/business/OpenLayersManager.createOpenLayConfig:([I[ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    2160: astore        17
+    2162: aload_1
+    2163: ldc_w         #580                // String openLayerConfig
+    2166: aload         17
+    2168: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2173: aload_1
+    2174: ldc_w         #582                // String language
+    2177: aload         12
+    2179: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2184: aload_1
+    2185: ldc_w         #584                // String sizeVectLayers
+    2188: aload_0
+    2189: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2192: invokevirtual #328                // Method org/owgis/business/OpenLayersManager.getVectorLayers:()Ljava/util/ArrayList;
+    2195: invokevirtual #371                // Method java/util/ArrayList.size:()I
+    2198: invokestatic  #507                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    2201: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2206: aload_1
+    2207: ldc_w         #586                // String linksKmzVect
+    2210: aload_0
+    2211: getfield      #324                // Field linksVectorialesKmz:[Ljava/lang/String;
+    2214: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2219: aload_1
+    2220: ldc_w         #588                // String paletteSelect
+    2223: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    2228: astore        18
+    2230: aload         18
+    2232: ifnonnull     2247
+    2235: aload         8
+    2237: ifnull        2247
+    2240: aload         8
+    2242: invokevirtual #590                // Method org/owgis/model/Layer.getPalette:()Ljava/lang/String;
+    2245: astore        18
+    2247: aload_1
+    2248: ldc_w         #593                // String palette
+    2251: aload         18
+    2253: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2258: aload_1
+    2259: ldc_w         #595                // String linkKML
+    2262: aload_0
+    2263: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2266: aload         7
+    2268: aload         18
+    2270: invokestatic  #597                // Method org/owgis/business/UserRequestManager.getKmlLink:(Lorg/owgis/business/OpenLayersManager;[ILjava/lang/String;)Ljava/lang/String;
+    2273: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2278: aload_0
+    2279: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2282: aload         7
+    2284: aload         16
+    2286: aload         12
+    2288: invokestatic  #601                // Method org/owgis/business/UserRequestManager.getTitleOfLayer:(Lorg/owgis/business/OpenLayersManager;[I[ILjava/lang/String;)Ljava/lang/String;
+    2291: astore        19
+    2293: aload_1
+    2294: ldc_w         #605                // String layerTitle
+    2297: aload         19
+    2299: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2304: aload_1
+    2305: ldc_w         #607                // String titleSize
+    2308: aload         19
+    2310: invokevirtual #609                // Method java/lang/String.length:()I
+    2313: invokestatic  #507                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    2316: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2321: aload_1
+    2322: ldc_w         #612                // String totalLayers
+    2325: aload_0
+    2326: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2329: invokevirtual #614                // Method org/owgis/business/OpenLayersManager.getTotalVisibleLayers:()I
+    2332: invokestatic  #507                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    2335: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2340: aload_1
+    2341: ldc_w         #617                // String _id_first_main_layer
+    2344: aload_0
+    2345: getfield      #108                // Field opManager:Lorg/owgis/business/OpenLayersManager;
+    2348: invokevirtual #619                // Method org/owgis/business/OpenLayersManager.getBackgroundLayers:()Ljava/util/ArrayList;
+    2351: invokevirtual #371                // Method java/util/ArrayList.size:()I
+    2354: invokestatic  #507                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    2357: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2362: aload_1
+    2363: ldc_w         #622                // String newSession
+    2366: aload         4
+    2368: invokeinterface #624,  1          // InterfaceMethod javax/servlet/http/HttpSession.isNew:()Z
+    2373: invokestatic  #7                  // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+    2376: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2381: aload_1
+    2382: ldc_w         #627                // String paletteUrl
+    2385: aload         8
+    2387: aload         18
+    2389: invokestatic  #629                // Method org/owgis/business/NetCDFRequestManager.getPaletteUrl:(Lorg/owgis/model/Layer;Ljava/lang/String;)Ljava/lang/String;
+    2392: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2397: aload_1
+    2398: ldc_w         #633                // String mapConfig
+    2401: aload_0
+    2402: getfield      #43                 // Field mapConfig:Lorg/owgis/conf/OpenLayerMapConfig;
+    2405: invokevirtual #634                // Method org/owgis/conf/OpenLayerMapConfig.toJSONObject:()Ljava/lang/String;
+    2408: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2413: aload_1
+    2414: ldc_w         #637                // String animationURL
+    2417: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    2422: astore        20
+    2424: aload_1
+    2425: ldc_w         #637                // String animationURL
+    2428: aload         20
+    2430: ifnonnull     2439
+    2433: ldc_w         #311                // String
+    2436: goto          2441
+    2439: aload         20
+    2441: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2446: getstatic     #639                // Field org/owgis/model/PagesNames.MAIN_PAGE:Ljava/lang/String;
+    2449: astore_3
+    2450: aload_1
+    2451: ldc_w         #642                // String mobile
+    2454: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    2459: astore        21
+    2461: aload_1
+    2462: ldc_w         #644                // String User-Agent
+    2465: invokeinterface #646,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getHeader:(Ljava/lang/String;)Ljava/lang/String;
+    2470: invokevirtual #649                // Method java/lang/String.toLowerCase:()Ljava/lang/String;
+    2473: astore        22
+    2475: aload         22
+    2477: ldc_w         #652                // String (?i).*((android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino).*
+    2480: invokevirtual #654                // Method java/lang/String.matches:(Ljava/lang/String;)Z
+    2483: ifne          2656
+    2486: aload         22
+    2488: ldc_w         #658                // String iphone
+    2491: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2494: iconst_m1
+    2495: if_icmpne     2656
+    2498: aload         22
+    2500: ldc_w         #660                // String ipad
+    2503: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2506: iconst_m1
+    2507: if_icmpne     2656
+    2510: aload         22
+    2512: ldc_w         #662                // String htc_flyer
+    2515: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2518: iconst_m1
+    2519: if_icmpne     2656
+    2522: aload         22
+    2524: ldc_w         #664                // String maemo
+    2527: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2530: iconst_m1
+    2531: if_icmpne     2656
+    2534: aload         22
+    2536: ldc_w         #666                // String tablet
+    2539: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2542: iconst_m1
+    2543: if_icmpne     2656
+    2546: aload         22
+    2548: ldc_w         #668                // String hpwos
+    2551: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2554: iconst_m1
+    2555: if_icmpne     2656
+    2558: aload         22
+    2560: ldc_w         #670                // String playbook
+    2563: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2566: iconst_m1
+    2567: if_icmpne     2656
+    2570: aload         22
+    2572: ldc_w         #672                // String palm
+    2575: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2578: iconst_m1
+    2579: if_icmpne     2656
+    2582: aload         22
+    2584: ldc_w         #674                // String webos
+    2587: invokevirtual #299                // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+    2590: iconst_m1
+    2591: if_icmpne     2656
+    2594: aload         22
+    2596: iconst_0
+    2597: iconst_4
+    2598: invokevirtual #305                // Method java/lang/String.substring:(II)Ljava/lang/String;
+    2601: ldc_w         #676                // String (?i)1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-
+    2604: invokevirtual #654                // Method java/lang/String.matches:(Ljava/lang/String;)Z
+    2607: ifne          2656
+    2610: aload         21
+    2612: ifnull        2626
+    2615: aload         21
+    2617: ldc_w         #678                // String true
+    2620: invokevirtual #680                // Method java/lang/String.equalsIgnoreCase:(Ljava/lang/String;)Z
+    2623: ifne          2656
+    2626: aload_1
+    2627: ldc_w         #642                // String mobile
+    2630: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    2635: ifnull        2675
+    2638: aload_1
+    2639: ldc_w         #642                // String mobile
+    2642: invokeinterface #512,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getParameter:(Ljava/lang/String;)Ljava/lang/String;
+    2647: ldc_w         #678                // String true
+    2650: invokevirtual #488                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+    2653: ifeq          2675
+    2656: getstatic     #683                // Field org/owgis/model/PagesNames.MOBILE_PAGE:Ljava/lang/String;
+    2659: astore_3
+    2660: aload_1
+    2661: ldc_w         #642                // String mobile
+    2664: ldc_w         #678                // String true
+    2667: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2672: goto          2687
+    2675: aload_1
+    2676: ldc_w         #642                // String mobile
+    2679: ldc_w         #686                // String false
+    2682: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2687: goto          2879
+    2690: astore        4
+    2692: aload_1
+    2693: ldc_w         #688                // String errorText
+    2696: new           #65                 // class java/lang/StringBuilder
+    2699: dup
+    2700: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2703: ldc_w         #690                // String Unable to parse XML files:
+    2706: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2709: aload         4
+    2711: invokevirtual #293                // Method org/owgis/exceptions/XMLFilesException.getMessage:()Ljava/lang/String;
+    2714: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2717: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2720: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2725: new           #282                // class java/io/StringWriter
+    2728: dup
+    2729: invokespecial #284                // Method java/io/StringWriter."<init>":()V
+    2732: astore        5
+    2734: aload         4
+    2736: new           #285                // class java/io/PrintWriter
+    2739: dup
+    2740: aload         5
+    2742: invokespecial #287                // Method java/io/PrintWriter."<init>":(Ljava/io/Writer;)V
+    2745: invokevirtual #290                // Method org/owgis/exceptions/XMLFilesException.printStackTrace:(Ljava/io/PrintWriter;)V
+    2748: aload         5
+    2750: invokevirtual #296                // Method java/io/StringWriter.toString:()Ljava/lang/String;
+    2753: astore        6
+    2755: aload_1
+    2756: ldc_w         #692                // String traceText
+    2759: aload         6
+    2761: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2766: ldc           #14                 // class org/owgis/business/servlets/MapViewerServlet
+    2768: invokevirtual #221                // Method java/lang/Class.getName:()Ljava/lang/String;
+    2771: invokestatic  #224                // Method java/util/logging/Logger.getLogger:(Ljava/lang/String;)Ljava/util/logging/Logger;
+    2774: getstatic     #230                // Field java/util/logging/Level.SEVERE:Ljava/util/logging/Level;
+    2777: aconst_null
+    2778: aload         4
+    2780: invokevirtual #236                // Method java/util/logging/Logger.log:(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V
+    2783: goto          2879
+    2786: astore        4
+    2788: aload_1
+    2789: ldc_w         #688                // String errorText
+    2792: new           #65                 // class java/lang/StringBuilder
+    2795: dup
+    2796: invokespecial #67                 // Method java/lang/StringBuilder."<init>":()V
+    2799: ldc_w         #694                // String Inialization Exception:
+    2802: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2805: aload         4
+    2807: invokevirtual #696                // Method java/lang/Exception.getMessage:()Ljava/lang/String;
+    2810: invokevirtual #70                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    2813: invokevirtual #74                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+    2816: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2821: new           #282                // class java/io/StringWriter
+    2824: dup
+    2825: invokespecial #284                // Method java/io/StringWriter."<init>":()V
+    2828: astore        5
+    2830: aload         4
+    2832: new           #285                // class java/io/PrintWriter
+    2835: dup
+    2836: aload         5
+    2838: invokespecial #287                // Method java/io/PrintWriter."<init>":(Ljava/io/Writer;)V
+    2841: invokevirtual #697                // Method java/lang/Exception.printStackTrace:(Ljava/io/PrintWriter;)V
+    2844: aload         5
+    2846: invokevirtual #296                // Method java/io/StringWriter.toString:()Ljava/lang/String;
+    2849: astore        6
+    2851: aload_1
+    2852: ldc_w         #692                // String traceText
+    2855: aload         6
+    2857: invokeinterface #321,  3          // InterfaceMethod javax/servlet/http/HttpServletRequest.setAttribute:(Ljava/lang/String;Ljava/lang/Object;)V
+    2862: ldc           #14                 // class org/owgis/business/servlets/MapViewerServlet
+    2864: invokevirtual #221                // Method java/lang/Class.getName:()Ljava/lang/String;
+    2867: invokestatic  #224                // Method java/util/logging/Logger.getLogger:(Ljava/lang/String;)Ljava/util/logging/Logger;
+    2870: getstatic     #230                // Field java/util/logging/Level.SEVERE:Ljava/util/logging/Level;
+    2873: aconst_null
+    2874: aload         4
+    2876: invokevirtual #236                // Method java/util/logging/Logger.log:(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V
+    2879: aload_1
+    2880: aload_3
+    2881: invokeinterface #698,  2          // InterfaceMethod javax/servlet/http/HttpServletRequest.getRequestDispatcher:(Ljava/lang/String;)Ljavax/servlet/RequestDispatcher;
+    2886: astore        4
+    2888: aload         4
+    2890: aload_1
+    2891: aload_2
+    2892: invokeinterface #702,  3          // InterfaceMethod javax/servlet/RequestDispatcher.forward:(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V
+    2897: return
+    Exception table:
+       from    to  target type
+          34    64    67   Class org/owgis/exceptions/XMLFilesException
+          15  2687  2690   Class org/owgis/exceptions/XMLFilesException
+          15  2687  2786   Class java/lang/Exception
+
+  protected void doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) throws javax.servlet.ServletException, java.io.IOException;
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: invokevirtual #708                // Method processRequest:(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V
+       6: return
+
+  protected void doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) throws javax.servlet.ServletException, java.io.IOException;
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: invokevirtual #708                // Method processRequest:(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V
+       6: return
+}

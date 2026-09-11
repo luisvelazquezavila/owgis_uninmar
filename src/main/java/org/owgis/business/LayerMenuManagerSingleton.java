@@ -827,6 +827,20 @@ public class LayerMenuManagerSingleton {
             instance.createMenuFromXMLfiles();
 
             System.out.println(">>> REGRESO DE createMenuFromXMLfiles()");
+            
+            System.out.println(">>> REGRESO DE createMenuFromXMLfiles()");
+            System.out.println("### vectorLayers.size() = " + vectorLayers.size());
+
+            for (Layer layer : vectorLayers) {
+                if ("MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn".equals(layer.getName())) {
+                    System.out.println("========== CHL_MDN EN VECTORLAYERS ==========");
+                    System.out.println("name = [" + layer.getName() + "]");
+                    System.out.println("identityHashCode = " + System.identityHashCode(layer));
+                    System.out.println("multipleDates = " + layer.isMultipleDates());
+                    System.out.println("maxTimeLayer = " + layer.getMaxTimeLayer());
+                    System.out.println("=============================================");
+                }
+            }
 
         } else {
 
@@ -1406,6 +1420,9 @@ private void createMenuFromXMLfiles() throws XMLFilesException {
         System.out.println("layer.maxTimeLayer = [" + layer.getMaxTimeLayer() + "]");
 
         System.out.println("========================================");
+        
+        System.out.println("### updateFields: name = [" + name + "]");
+        System.out.println("### updateFields: layer.getName() = [" + layer.getName() + "]");
         
         if ("MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn"
         .equals(name)) {

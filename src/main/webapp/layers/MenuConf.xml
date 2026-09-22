@@ -21,7 +21,7 @@
 	<MainLayers BBOX="-179.0,-89.0,179.0,89.0"
 				format="image/png"
 				server="http://erddap.icmyl.unam.mx/oceficc/erddap/wms/mx_unam_icml_clim_glo_mld_2deg_p1m_v1_all/request">
-		<layer Menu="ERDDAP,WMS,mldMean"
+		<layer Menu="ERDDAP,mldMean"
 			   EN="ERDDAP - Mixed Layer Depth Mean"
 			   ES="ERDDAP - Profundidad media de capa mezclada"
 			   name="mld_mean"
@@ -33,7 +33,7 @@
 	<MainLayers BBOX="-106.95829,22.50700,-105.87737,23.50776"
 				format="image/png"
 				server="https://erddap.icmyl.unam.mx/uninmar/erddap/wms/MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN/request">
-		<layer Menu="ERDDAP,WMS,Mazatlan_Chlorophyll"
+		<layer Menu="ERDDAP,Mazatlan_Chlorophyll"
 			   EN="Chlorophyll-a Mazatlán (MDN) [T13QCF]"
 			   ES="Clorofila-a Mazatlán (MDN) [T13QCF]"
 			   name="MX_UNAM_ICML_MSI_T13QCF_60_ChlMDN:chl_mdn"

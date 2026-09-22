@@ -114,3 +114,12 @@
 .ui-widget {
   /*font-size: $f_tiny;*/
 }
+
+.erddap-tree-year-header:hover,
+.erddap-tree-month-header:hover,
+.erddap-tree-day:hover {
+    /* estilos al pasar el mouse */
+    background-color: #eee;
+    cursor: pointer;
+}
+

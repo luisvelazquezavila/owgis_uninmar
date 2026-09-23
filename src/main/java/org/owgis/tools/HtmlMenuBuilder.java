@@ -47,53 +47,87 @@ public class HtmlMenuBuilder {
 	 * @param {String} language String the user language
 	 * @return String the htmlcode that creates the dropdown menus
 	 */
-	public static String createMainMenu(TreeNode rootNode, String language) {
+	public static String createMainMenu(TreeNode rootNode, String language) {          
 
 		TreeNode currRoot = rootNode;
 		int deepLevel = 1;
 		String htmlCode = "";
 		String tabs = "\t\t\t\t\t";
-		//if we want to display the horizontal menu type
+		//if we want to display the horizontal menu type               
+                
 		if (baseLayerMenuOrientation.toLowerCase().equals("horizontal")) {
 			htmlCode += "<tr>";
 
 			while (currRoot.getHasChilds()) {
 				ArrayList<TreeNode> subMenus = currRoot.getChilds();
-				htmlCode += "<select class='mainMenu' id='dropDownLevels" + deepLevel + "' name='dropDownLevels' onchange='MapViewersubmitForm();' data-mini='true'>";
-				for (int i = 0; i < subMenus.size(); i++) {
-					MenuEntry menu = subMenus.get(i).getNode();
-					htmlCode += "<option class='mainMenuOption' value='" + menu.getId() + "' ";
+                                
+                                System.out.println("### MENU NIVEL " + deepLevel + " = " + subMenus.get(0).getNode().getId());
+                                
+				if (deepLevel == 1) {
+                                    htmlCode += "<input type='hidden' name='dropDownLevels' value='" + subMenus.get(0).getNode().getId() + "'>";
+                                } else {
+                                    htmlCode += "<select class='mainMenu' id='dropDownLevels" + deepLevel + "' name='dropDownLevels' onchange='MapViewersubmitForm();' data-mini='true'>";
+                                }
 
-					if (subMenus.get(i).isSelected()) {
-						currRoot = subMenus.get(i);
-						htmlCode += "selected";
-					}
-					htmlCode += ">" + HtmlMenuBuilder.translateName(subMenus.get(i), language) + " </option>\n";
-				}
-				htmlCode += "</select>";
-				deepLevel++;
+                                if (deepLevel > 1) {
+                                    for (int i = 0; i < subMenus.size(); i++) {
+                                        MenuEntry menu = subMenus.get(i).getNode();
+                                        htmlCode += "<option class='mainMenuOption' value='" + menu.getId() + "' ";
+
+                                        if (subMenus.get(i).isSelected()) {
+                                            currRoot = subMenus.get(i);
+                                            htmlCode += "selected";
+                                        }
+                                        htmlCode += ">" + HtmlMenuBuilder.translateName(subMenus.get(i), language) + " </option>\n";
+                                    }
+                                }
+                                
+				if (deepLevel > 1) {
+                                    htmlCode += "</select>";
+                                }
+                                deepLevel++;
 			}
 
 			htmlCode += "";
 
 		} else {//this else is to display the vertical menu type. 
-			while (currRoot.getHasChilds()) {
-				ArrayList<TreeNode> subMenus = currRoot.getChilds();
-				htmlCode += tabs + "\t<select class='mainMenu' id='dropDownLevels" + deepLevel + "' name='dropDownLevels' onchange='MapViewersubmitForm();' data-mini='true'>\n";
-				for (int i = 0; i < subMenus.size(); i++) {
-					MenuEntry menu = subMenus.get(i).getNode();
-					htmlCode += tabs + "\t\t<option class='mainMenuOption' value='" + menu.getId() + "' ";
+                    while (currRoot.getHasChilds()) {
+                        ArrayList<TreeNode> subMenus = currRoot.getChilds();
 
-					if (subMenus.get(i).isSelected()) {
-						currRoot = subMenus.get(i);
-						htmlCode += "selected";
-					}
-					htmlCode += ">" + HtmlMenuBuilder.translateName(subMenus.get(i), language) + " </option>\n";
-				}
-				htmlCode += tabs + "</select>\n";
-				deepLevel++;
-			}
-		}
+                        if (deepLevel == 1) {
+                            htmlCode += tabs + "\t<input type='hidden' name='dropDownLevels' value='" + subMenus.get(0).getNode().getId() + "'>\n";
+
+                            for (int i = 0; i < subMenus.size(); i++) {
+                                if (subMenus.get(i).isSelected()) {
+                                    currRoot = subMenus.get(i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            htmlCode += tabs + "\t<select class='mainMenu' id='dropDownLevels" + deepLevel + "' name='dropDownLevels' onchange='MapViewersubmitForm();' data-mini='true'>\n";
+                        }
+
+                        if (deepLevel > 1) {
+                            for (int i = 0; i < subMenus.size(); i++) {
+                                MenuEntry menu = subMenus.get(i).getNode();
+                                htmlCode += tabs + "\t\t<option class='mainMenuOption' value='" + menu.getId() + "' ";
+
+                                if (subMenus.get(i).isSelected()) {
+                                    currRoot = subMenus.get(i);
+                                    htmlCode += "selected";
+                                }
+
+                                htmlCode += ">" + HtmlMenuBuilder.translateName(subMenus.get(i), language) + " </option>\n";
+                            }
+                        }
+
+                        if (deepLevel > 1) {
+                            htmlCode += tabs + "</select>\n";
+                        }
+
+                        deepLevel++;
+                    }
+                }
 		return htmlCode;
 	}
 

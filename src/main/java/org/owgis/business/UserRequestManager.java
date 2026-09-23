@@ -59,6 +59,9 @@ public class UserRequestManager {
 			//if the request is not wcs then we obtain the layers that the user selected. 
 
 			levelsSelected = request.getParameterValues("dropDownLevels");
+                        
+                        System.out.println("### UserRequestManager EJECUTADO");
+                        System.out.println("### dropDownLevels RECIBIDOS = " + Arrays.toString(levelsSelected));
 		}
 		//Obtain the menu of the user that is in session. 
 		TreeNode rootMenu = (TreeNode) session.getAttribute("MenuDelUsuario");

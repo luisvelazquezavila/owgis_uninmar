@@ -50,16 +50,47 @@ public class HtmlMenuBuilder {
 	public static String createMainMenu(TreeNode rootNode, String language) {          
 
 		TreeNode currRoot = rootNode;
+                
+                System.out.println("========== DEBUG createMainMenu ==========");
+                System.out.println("ROOT hasChilds = " + rootNode.getHasChilds());
+
+                if (rootNode.getHasChilds()) {
+                    for (TreeNode n : rootNode.getChilds()) {
+                        System.out.println("ROOT CHILD = " + n.getNode().getId()
+                                + " | selected=" + n.isSelected()
+                                + " | hasChilds=" + n.getHasChilds());
+
+                        if (n.getHasChilds()) {
+                            for (TreeNode c : n.getChilds()) {
+                                System.out.println("    CHILD = " + c.getNode().getId()
+                                        + " | selected=" + c.isSelected());
+                            }
+                        }
+                    }
+                }
+
+                System.out.println("==========================================");
+                
 		int deepLevel = 1;
 		String htmlCode = "";
 		String tabs = "\t\t\t\t\t";
-		//if we want to display the horizontal menu type               
+		//if we want to display the horizontal menu type     
+                
+                System.out.println("### ORIENTACION MENU = " + baseLayerMenuOrientation);
                 
 		if (baseLayerMenuOrientation.toLowerCase().equals("horizontal")) {
 			htmlCode += "<tr>";
+                        
+                        System.out.println("### ANTES DEL WHILE | currRoot="
+                            + currRoot.getNode().getId()
+                            + " | hasChilds=" + currRoot.getHasChilds());
 
 			while (currRoot.getHasChilds()) {
 				ArrayList<TreeNode> subMenus = currRoot.getChilds();
+                                
+                                System.out.println("### MENU LOOP nivel=" + deepLevel
+                                    + " | currRoot=" + currRoot.getNode().getId()
+                                    + " | hijos=" + subMenus.size());
                                 
                                 System.out.println("### MENU NIVEL " + deepLevel + " = " + subMenus.get(0).getNode().getId());
                                 
@@ -90,45 +121,64 @@ public class HtmlMenuBuilder {
 
 			htmlCode += "";
 
-		} else {//this else is to display the vertical menu type. 
+		} else { // vertical
                     while (currRoot.getHasChilds()) {
                         ArrayList<TreeNode> subMenus = currRoot.getChilds();
 
                         if (deepLevel == 1) {
-                            htmlCode += tabs + "\t<input type='hidden' name='dropDownLevels' value='" + subMenus.get(0).getNode().getId() + "'>\n";
+                            TreeNode parentNode = subMenus.get(0);
 
-                            for (int i = 0; i < subMenus.size(); i++) {
-                                if (subMenus.get(i).isSelected()) {
-                                    currRoot = subMenus.get(i);
+                            htmlCode += tabs + "\t<div class='mainMenuGroup'>\n";
+
+                            htmlCode += tabs + "\t\t<input type='hidden' name='dropDownLevels' value='"
+                                    + parentNode.getNode().getId() + "'>\n";
+
+                            htmlCode += tabs + "\t\t<div class='mainMenu mainMenuParent' "
+                                + "onclick=\"document.getElementById('mainMenuChildren').style.display = "
+                                + "(document.getElementById('mainMenuChildren').style.display === 'none' ? 'block' : 'none');\">"
+                                + "<p>" + HtmlMenuBuilder.translateName(parentNode, language) + "</p>"
+                                + "<span>▼</span>"
+                                + "</div>\n";
+
+                            htmlCode += tabs + "\t\t<div id='mainMenuChildren' style='display:none;'>\n";
+
+                            for (int i = 0; i < parentNode.getChilds().size(); i++) {
+                                TreeNode childNode = parentNode.getChilds().get(i);
+                                MenuEntry childMenu = childNode.getNode();
+
+                                htmlCode += tabs + "\t\t\t<div class='mainMenuOption' "
+                                        + "onclick=\"document.getElementById('selectedErddapLayer').value='"
+                                        + childMenu.getId()
+                                        + "'; MapViewersubmitForm();\">"
+                                        + HtmlMenuBuilder.translateName(childNode, language)
+                                        + "</div>\n";
+                            }
+
+                            htmlCode += tabs + "\t\t\t<input type='hidden' id='selectedErddapLayer' "
+                                    + "name='dropDownLevels' value='";
+
+                            String selectedLayer = "";
+                            for (int i = 0; i < parentNode.getChilds().size(); i++) {
+                                if (parentNode.getChilds().get(i).isSelected()) {
+                                    selectedLayer = parentNode.getChilds().get(i).getNode().getId();
                                     break;
                                 }
                             }
-                        } else {
-                            htmlCode += tabs + "\t<select class='mainMenu' id='dropDownLevels" + deepLevel + "' name='dropDownLevels' onchange='MapViewersubmitForm();' data-mini='true'>\n";
-                        }
 
-                        if (deepLevel > 1) {
-                            for (int i = 0; i < subMenus.size(); i++) {
-                                MenuEntry menu = subMenus.get(i).getNode();
-                                htmlCode += tabs + "\t\t<option class='mainMenuOption' value='" + menu.getId() + "' ";
+                            htmlCode += selectedLayer + "'>\n";
 
-                                if (subMenus.get(i).isSelected()) {
-                                    currRoot = subMenus.get(i);
-                                    htmlCode += "selected";
-                                }
+                            htmlCode += tabs + "\t\t</div>\n";
+                            htmlCode += tabs + "\t</div>\n";
 
-                                htmlCode += ">" + HtmlMenuBuilder.translateName(subMenus.get(i), language) + " </option>\n";
-                            }
-                        }
-
-                        if (deepLevel > 1) {
-                            htmlCode += tabs + "</select>\n";
+                            break;
                         }
 
                         deepLevel++;
                     }
                 }
-		return htmlCode;
+                System.out.println("### FIN createMainMenu | htmlCode.length=" + htmlCode.length());
+		System.out.println("### HTML createMainMenu = " + htmlCode);
+                return htmlCode;
 	}
 
 	/**

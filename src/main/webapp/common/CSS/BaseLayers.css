@@ -87,3 +87,34 @@ This file defines the styles for the Base layers
 #mainMenuParentHover {
   left: 200px;
 }
+
+.mainMenuGroup {
+    width: max-content;
+    min-width: 165px;
+}
+
+.mainMenuParent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+#mainMenuChildren {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.mainMenuOption {
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 6px 10px;
+    background-color: #777777;
+}
+
+.mainMenuOption:hover {
+    background-color: #666666;
+}

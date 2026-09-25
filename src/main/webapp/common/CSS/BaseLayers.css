@@ -98,7 +98,7 @@ This file defines the styles for the Base layers
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    padding: 0 10px;
+    padding: 5px 10px 0 10px;
     box-sizing: border-box;
 }
 

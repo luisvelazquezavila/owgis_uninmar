@@ -21,7 +21,7 @@
 	<MainLayers BBOX="-179.0,-89.0,179.0,89.0"
 				format="image/png"
 				server="http://erddap.icmyl.unam.mx/oceficc/erddap/wms/mx_unam_icml_clim_glo_mld_2deg_p1m_v1_all/request">
-		<layer Menu="ERDDAP,mldMean"
+		<layer Menu="WMS,mldMean"
 			   EN="ERDDAP - Mixed Layer Depth Mean"
 			   ES="ERDDAP - Profundidad media de capa mezclada"
 			   name="mld_mean"

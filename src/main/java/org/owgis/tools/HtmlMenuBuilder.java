@@ -126,49 +126,61 @@ public class HtmlMenuBuilder {
                         ArrayList<TreeNode> subMenus = currRoot.getChilds();
 
                         if (deepLevel == 1) {
-                            TreeNode parentNode = subMenus.get(0);
 
-                            htmlCode += tabs + "\t<div class='mainMenuGroup'>\n";
+                            // Inputs globales para enviar únicamente el camino seleccionado
+                            htmlCode += tabs + "\t<input type='hidden' id='selectedParent' value=''>\n";
+                            htmlCode += tabs + "\t<input type='hidden' id='selectedLayer' value=''>\n";
 
-                            htmlCode += tabs + "\t\t<input type='hidden' name='dropDownLevels' value='"
-                                    + parentNode.getNode().getId() + "'>\n";
+                            for (int i = 0; i < subMenus.size(); i++) {
 
-                            htmlCode += tabs + "\t\t<div class='mainMenu mainMenuParent' "
-                                + "onclick=\"document.getElementById('mainMenuChildren').style.display = "
-                                + "(document.getElementById('mainMenuChildren').style.display === 'none' ? 'block' : 'none');\">"
-                                + "<p>" + HtmlMenuBuilder.translateName(parentNode, language) + "</p>"
-                                + "<span>▼</span>"
-                                + "</div>\n";
+                                TreeNode parentNode = subMenus.get(i);
+                                String parentId = parentNode.getNode().getId();
 
-                            htmlCode += tabs + "\t\t<div id='mainMenuChildren' style='display:none;'>\n";
+                                String childrenId = "mainMenuChildren_" + parentId;
+                                String arrowId = "mainMenuArrow_" + parentId;
 
-                            for (int i = 0; i < parentNode.getChilds().size(); i++) {
-                                TreeNode childNode = parentNode.getChilds().get(i);
-                                MenuEntry childMenu = childNode.getNode();
+                                htmlCode += tabs + "\t<div class='mainMenuGroup'>\n";
 
-                                htmlCode += tabs + "\t\t\t<div class='mainMenuOption' "
-                                        + "onclick=\"document.getElementById('selectedErddapLayer').value='"
-                                        + childMenu.getId()
-                                        + "'; MapViewersubmitForm();\">"
-                                        + HtmlMenuBuilder.translateName(childNode, language)
+                                htmlCode += tabs + "\t\t<div class='mainMenu mainMenuParent' "
+                                        + "onclick=\"var menu=document.getElementById('" + childrenId + "'); "
+                                        + "var arrow=document.getElementById('" + arrowId + "'); "
+                                        + "if(menu.style.display === 'none'){ "
+                                        + "menu.style.display='block'; "
+                                        + "arrow.textContent='▲'; "
+                                        + "}else{ "
+                                        + "menu.style.display='none'; "
+                                        + "arrow.textContent='▼'; "
+                                        + "}\">"
+                                        + "<p>" + HtmlMenuBuilder.translateName(parentNode, language) + "</p>"
+                                        + "<span id='" + arrowId + "'>▼</span>"
                                         + "</div>\n";
-                            }
 
-                            htmlCode += tabs + "\t\t\t<input type='hidden' id='selectedErddapLayer' "
-                                    + "name='dropDownLevels' value='";
+                                htmlCode += tabs + "\t\t<div id='" + childrenId + "' "
+                                        + "class='mainMenuChildren' style='display:none;'>\n";
 
-                            String selectedLayer = "";
-                            for (int i = 0; i < parentNode.getChilds().size(); i++) {
-                                if (parentNode.getChilds().get(i).isSelected()) {
-                                    selectedLayer = parentNode.getChilds().get(i).getNode().getId();
-                                    break;
+                                for (int j = 0; j < parentNode.getChilds().size(); j++) {
+
+                                    TreeNode childNode = parentNode.getChilds().get(j);
+                                    MenuEntry childMenu = childNode.getNode();
+
+                                    htmlCode += tabs + "\t\t\t<div class='mainMenuOption' "
+                                            + "onclick=\"document.getElementById('selectedParent').name='dropDownLevels'; "
+                                            + "document.getElementById('selectedLayer').name='dropDownLevels'; "
+                                            + "document.getElementById('selectedParent').value='"
+                                            + parentId
+                                            + "'; "
+                                            + "document.getElementById('selectedLayer').value='"
+                                            + childMenu.getId()
+                                            + "'; "
+                                            + "console.log(new FormData(document.baseForm).getAll('dropDownLevels')); "
+                                            + "MapViewersubmitForm();\">"
+                                            + HtmlMenuBuilder.translateName(childNode, language)
+                                            + "</div>\n";
                                 }
+
+                                htmlCode += tabs + "\t\t</div>\n";
+                                htmlCode += tabs + "\t</div>\n";
                             }
-
-                            htmlCode += selectedLayer + "'>\n";
-
-                            htmlCode += tabs + "\t\t</div>\n";
-                            htmlCode += tabs + "\t</div>\n";
 
                             break;
                         }
